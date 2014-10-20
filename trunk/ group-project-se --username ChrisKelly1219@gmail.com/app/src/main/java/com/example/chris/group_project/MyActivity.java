@@ -13,7 +13,7 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
     }
-
+    //this comment is a test
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

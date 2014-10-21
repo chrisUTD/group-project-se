@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item type="color" name="tab_bar_button_selected_background">#ffb1ceff</item>
+    <item type="color" name="tab_bar_button_background">#ffcaced1</item>
+
+</resources>

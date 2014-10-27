@@ -1,4 +1,4 @@
-package com.example.nahuecht.sunshine;
+package com.example.chris.group_project;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Contact
 {
+    //temp change
     private int id;
     private String firstName;
     private String middleName;

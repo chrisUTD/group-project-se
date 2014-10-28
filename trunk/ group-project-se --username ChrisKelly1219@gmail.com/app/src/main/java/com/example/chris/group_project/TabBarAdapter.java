@@ -7,8 +7,8 @@ public interface TabBarAdapter {
 
     public int getCount();
     public String getTabTitle(Integer index);
-    public int getTabImageResourceId(Integer index);
+    public TabBarButton getTabBarButtonForIndex(Integer index);
+    public void getSelectedTab(Integer index);
 
-    public void tabSelected(Integer index);
-
+    public void tabButtonClicked(Integer index);
 }

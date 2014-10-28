@@ -12,6 +12,10 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+
+
+
+
     }
     //this comment is a test
 
@@ -33,4 +37,26 @@ public class MyActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    /** TAB BAR BUTTON IMPLEMENTATION **/
+//
+//    public int getCount(){
+//        return 3;
+//    }
+//    public String getTabTitle(Integer index){
+//        switch (index) {
+//            case 0:
+//                return "Contacts";
+//            case 1:
+//                return "Groups";
+//            case 2:
+//                return "Favorites";
+//        }
+//    }
+//    public TabBarButton getTabBarButtonForIndex(Integer index){
+//
+//    }
+//    public void getSelectedTab(Integer index){}
+//
+//    public void tabButtonClicked(Integer index){}
 }

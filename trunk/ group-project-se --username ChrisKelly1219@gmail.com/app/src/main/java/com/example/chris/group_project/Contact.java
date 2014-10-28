@@ -9,18 +9,35 @@ import java.util.ArrayList;
 public class Contact
 {
     //temp change
-    private int id;
+    private Integer id; // Contact Manager id
+    private String LOOKUP_KEY; // Android key
+    private String CONTACT_ID; // Android database id
+
+    private String displayName;
     private String firstName;
     private String middleName;
     private String lastName;
     private ArrayList<String> phoneNumbers;
     private ArrayList<String> emailAddresses;
-    private ArrayList<Integer> groups;
-    private String pictureUri;
+    private ArrayList<Integer> groups; //TODO: Determine how Groups need to be stored.
+    private String photoUri;
 
-    public Contact(String name, String phone)
-    {
+    // Additional data about a contact stored by Android that may be useful
+    private int timesContacted;
+    private long lastTimeContacted;
+    private int starred;
+    private int sendToVoicemail;
+
+    // Flags
+    private boolean containsNewData = false;
+    private boolean containsDetails = false;
+
+    public Contact(){
+        phoneNumbers = new ArrayList<String>();
+        emailAddresses = new ArrayList<String>();
+        groups = new ArrayList<Integer>();
     }
+
     /*The search in phone numbers could be trickey to do with the use of
     parenthesis in phone numbers usually. may need a different storage method
     perhaps some regex trickerey could work well here.
@@ -53,8 +70,24 @@ public class Contact
         }
         return false;
     }
-    public int getId(){return id;}
+    public Integer getId(){return id;}
     public void setId(int id){this.id = id;}
+
+    public String getLOOKUP_KEY() {
+        return LOOKUP_KEY;
+    }
+
+    public void setLOOKUP_KEY(String LOOKUP_KEY) {
+        this.LOOKUP_KEY = LOOKUP_KEY;
+    }
+
+    public String getCONTACT_ID() {
+        return CONTACT_ID;
+    }
+
+    public void setCONTACT_ID(String CONTACT_ID) {
+        this.CONTACT_ID = CONTACT_ID;
+    }
 
     public String getFirstName(){return firstName;}
     public void setFirstName(String firstName){this.firstName = firstName;}
@@ -74,6 +107,77 @@ public class Contact
     public ArrayList<Integer> getGroups(){return groups;}
     public void setGroups(ArrayList<Integer> groups){this.groups = groups;}
 
-    public String getPictureUri(){return pictureUri;}
-    public void setPictureUri(String pictureUri){this.pictureUri = pictureUri;}
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+
+    public void putPhoneNumber(String n) {
+        this.phoneNumbers.add(n);
+    }
+
+    public void putEmailAddress(String e) {
+        this.emailAddresses.add(e);
+    }
+
+    public String getPhotoUri() {
+        return photoUri;
+    }
+
+    public void setPhotoUri(String photoUri) {
+        this.photoUri = photoUri;
+    }
+
+    public int getTimesContacted() {
+        return timesContacted;
+    }
+
+    public void setTimesContacted(int timesContacted) {
+        this.timesContacted = timesContacted;
+    }
+
+    public long getLastTimeContacted() {
+        return lastTimeContacted;
+    }
+
+    public void setLastTimeContacted(long lastTimeContacted) {
+        this.lastTimeContacted = lastTimeContacted;
+    }
+
+    public int getStarred() {
+        return starred;
+    }
+
+    public void setStarred(int starred) {
+        this.starred = starred;
+    }
+
+    public int getSendToVoicemail() {
+        return sendToVoicemail;
+    }
+
+    public void setSendToVoicemail(int sendToVoicemail) {
+        this.sendToVoicemail = sendToVoicemail;
+    }
+
+    public boolean containsNewData() {
+        return containsNewData;
+    }
+
+    public void setContainsNewData(boolean containsNewData) {
+        this.containsNewData = containsNewData;
+    }
+    
+    public boolean containsDetails() {
+        return containsDetails;
+    }
+
+    public void setContainsDetails(boolean containsDetails) {
+        this.containsDetails = containsDetails;
+    }
 }

@@ -3,14 +3,17 @@ package com.example.chris.group_project;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -60,7 +63,6 @@ public class MainActivity extends Activity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
     }
 
 
@@ -83,7 +85,20 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ContactManager.getInstance(this).refresh();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("Main Activity", "returned on activity result");
+
+        ContactManager.getInstance(this).refresh();
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -165,9 +180,14 @@ public class MainActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
             ((TextView)rootView.findViewById(R.id.section_label)).setText(section_name);
+            ContactListAdapter adapter = new ContactListAdapter(getActivity(),
+                    R.layout.contact_list_item_view,
+                    ContactManager.getInstance(getActivity()));
+            ((ListView)rootView.findViewById(R.id.contacts_list_view)).setAdapter(adapter);
 
             return rootView;
         }
+
     }
 
 }

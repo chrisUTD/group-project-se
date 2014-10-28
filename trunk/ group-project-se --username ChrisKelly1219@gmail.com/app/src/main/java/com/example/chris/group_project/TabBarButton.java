@@ -3,6 +3,8 @@ package com.example.chris.group_project;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,6 +27,11 @@ public class TabBarButton extends Button {
 
     public TabBarButton(Context context, String label, Drawable defaultImage, Drawable selectedImage){
         super(context);
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View view = inflater.inflate(R.layout.tab_bar_button, null);
+
+
         isSelected = false;
         this.defaultImage = defaultImage;
         this.selectedImage = selectedImage;
@@ -34,6 +41,19 @@ public class TabBarButton extends Button {
         ((ImageView)findViewById(R.id.tab_button_image)).setImageDrawable(defaultImage);
         getRootView().setBackgroundColor(getContext().getResources().getColor(R.color.tab_bar_button_background));
 
+    }
+
+
+
+
+    public TabBarButton(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        //--- Additional custom code --
+    }
+
+    public TabBarButton(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        //--- Additional custom code --
     }
 
     public void setSelected(boolean shouldSetSelected){
@@ -50,6 +70,8 @@ public class TabBarButton extends Button {
             ((ImageView)findViewById(R.id.tab_button_image)).setImageDrawable(defaultImage);
             getRootView().setBackgroundColor(getContext().getResources().getColor(R.color.tab_bar_button_background));
         }
+        invalidate();
+        requestLayout();
     }
 
 }

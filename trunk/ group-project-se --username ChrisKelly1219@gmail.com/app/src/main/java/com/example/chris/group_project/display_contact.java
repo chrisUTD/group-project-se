@@ -1,20 +1,17 @@
 package com.example.chris.group_project;
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.content.Intent;
-import android.net.Uri;
-
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,6 +26,11 @@ import java.util.ArrayList;
         ImageView picture;
         TextView name;
 
+        /**
+         * Empty constructor, used when launching activity via intent.
+         */
+        public display_contact(){}
+
         public display_contact( Contact temp)
         {
             contact = temp;
@@ -38,17 +40,37 @@ import java.util.ArrayList;
         protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            name = (TextView) findViewById(R.id.sc_Name);
-            picture = (ImageView) findViewById(R.id.sc_Image);
-            name.setText(contact.getDisplayName());
-            picture.setImageURI(Uri.parse(contact.getPhotoUri()));
+
+            // Retrieve the contact id passed through the intent when this activity is launched
+            // the retrieve contact and set it as this.contact
+            Intent intent = getIntent();
+            if (intent != null){
+                Bundle extras = intent.getExtras();
+                if (extras != null){
+                    Integer contactId = extras.getInt("contactId");
+                    if (contactId != null){
+                        Contact findContact = ContactManager.getInstance(this).get(contactId);
+                        if (findContact != null){
+                            contact = findContact;
+                        }
+                    }
+                }
+            }
 
             setContentView(R.layout.show_contact);
 
+            name = (TextView) findViewById(R.id.sc_Name);
+            picture = (ImageView) findViewById(R.id.sc_Image);
 
-            populateList();
+            name.setText(contact.getDisplayName());
+            if(contact.getPhotoUri() != null) {
+                picture.setImageURI(Uri.parse(contact.getPhotoUri()));
+            }
+
+
+           // populateList(); //TODO: fix null pointer exception on this method
         }
-
+        //TODO: Fix this: contactListView has not yet been found, so this method throws null exception
         private void populateList()
         {
             ArrayAdapter<String> adapter = new phoneNumberListAdapter();
@@ -109,12 +131,6 @@ import java.util.ArrayList;
                 return view;
             }
 
-
-
-
-
-
-
         }
 
         @Override
@@ -135,6 +151,18 @@ import java.util.ArrayList;
             }
             return super.onOptionsItemSelected(item);
         }
+
+
+        //TODO: ADD THIS CODE TO SOME CLICK LISTENER FOR LAUNCHING EDIT SCREEN
+        // assumes that you have an object named 'contact' for which you want to launch the edit screen.
+//            Uri lookupUri = ContactsContract.Contacts.getLookupUri(Long.parseLong(contact.getCONTACT_ID()), contact.getLOOKUP_KEY());
+//
+//            Intent editIntent = new Intent(Intent.ACTION_EDIT);
+//            editIntent.setDataAndType(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+//            editIntent.putExtra("finishActivityOnSaveCompleted", true);
+//
+//            ((Activity)getContext()).startActivityForResult(editIntent, 0);
+
     }
 
 

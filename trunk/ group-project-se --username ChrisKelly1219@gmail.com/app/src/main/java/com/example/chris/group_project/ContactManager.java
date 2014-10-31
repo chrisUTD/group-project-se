@@ -281,4 +281,18 @@ public class ContactManager
         return contact;
     }
 
+    /**
+     * Find contact that has the provided CONTACT_ID, which is the Android id for that aggregate contact.
+     * @param findCONTACT_ID id of the contact you are trying to find.
+     * @return contact
+     */
+    public Contact getContactByCONTACT_ID(String findCONTACT_ID){
+        Contact foundContact = null;
+        for (Contact contact : contacts){
+            if (contact.getCONTACT_ID() != null && contact.getCONTACT_ID() == findCONTACT_ID){
+                foundContact = contact;
+            }
+        }
+        return foundContact;
+    }
 }

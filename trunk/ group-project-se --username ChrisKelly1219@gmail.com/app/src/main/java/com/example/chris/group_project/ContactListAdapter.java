@@ -1,11 +1,9 @@
 package com.example.chris.group_project;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,14 +64,20 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         if (contact != null && contact.getClass() == Contact.class){
             contact =  manager.get(contact.getId()); // make sure the reference is correct
 
-            Uri lookupUri = ContactsContract.Contacts.getLookupUri(Long.parseLong(contact.getCONTACT_ID()), contact.getLOOKUP_KEY());
+            // CODE TO LAUNCH EDIT SCREEN FOR A CONTACT
+//            Uri lookupUri = ContactsContract.Contacts.getLookupUri(Long.parseLong(contact.getCONTACT_ID()), contact.getLOOKUP_KEY());
+//
+//            Intent editIntent = new Intent(Intent.ACTION_EDIT);
+//            editIntent.setDataAndType(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+//            editIntent.putExtra("finishActivityOnSaveCompleted", true);
+//
+//            ((Activity)getContext()).startActivityForResult(editIntent, 0);
 
-            Intent editIntent = new Intent(Intent.ACTION_EDIT);
-            editIntent.setDataAndType(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-            editIntent.putExtra("finishActivityOnSaveCompleted", true);
-
-            // getContext().startActivityForResult(editIntent);
-            ((Activity)getContext()).startActivityForResult(editIntent, 0);
+            Intent displayContactIntent = new Intent(getContext(), display_contact.class);
+            if (contact != null){
+                displayContactIntent.putExtra("contactId", contact.getId());
+            }
+            (getContext()).startActivity(displayContactIntent);
         }
     }
 }

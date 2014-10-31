@@ -1,4 +1,4 @@
-import com.example.chris.group_project.Group;
+package com.example.chris.group_project;
 
 import java.util.ArrayList;
 
@@ -15,9 +15,17 @@ public class GroupManager
         return instance;
     }
 
-    //i think this is whats up but this the right thing but i have
-    public ArrayList<Group> groups()
+    private ArrayList<Group> groups()
     {
         return groups;
     }
+
+    public void load(){
+
+    }
+
+    public void refresh(){
+
+    }
+
 }

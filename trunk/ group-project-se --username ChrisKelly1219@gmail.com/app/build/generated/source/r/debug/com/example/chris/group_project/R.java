@@ -11,8 +11,10 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int tab_bar_button_background=0x7f040000;
-        public static final int tab_bar_button_selected_background=0x7f040001;
+        public static final int contact_list_background=0x7f040000;
+        public static final int contact_list_selected_background=0x7f040001;
+        public static final int tab_bar_button_background=0x7f040002;
+        public static final int tab_bar_button_selected_background=0x7f040003;
     }
     public static final class dimen {
         public static final int activity_horizontal_margin=0x7f050000;

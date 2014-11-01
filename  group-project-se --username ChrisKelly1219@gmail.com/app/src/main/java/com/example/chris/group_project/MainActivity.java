@@ -182,7 +182,8 @@ public class MainActivity extends Activity {
             ((TextView)rootView.findViewById(R.id.section_label)).setText(section_name);
             ContactListAdapter adapter = new ContactListAdapter(getActivity(),
                     R.layout.contact_list_item_view,
-                    ContactManager.getInstance(getActivity()));
+                    ContactManager.getInstance(getActivity()),
+                    ContactListAdapter.ContactListMode.SHOW_DETAILS_ON_CLICK);
             ((ListView)rootView.findViewById(R.id.contacts_list_view)).setAdapter(adapter);
 
             return rootView;

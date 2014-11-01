@@ -3,5 +3,7 @@
 
     <item type="color" name="tab_bar_button_selected_background">#ffb1ceff</item>
     <item type="color" name="tab_bar_button_background">#ffcaced1</item>
+    <item type="color" name="contact_list_background">#ffcaced1</item>
+    <item type="color" name="contact_list_selected_background">#ff577fd1</item>
 
 </resources>

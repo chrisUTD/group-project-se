@@ -21,7 +21,7 @@ public class TabBarButton extends Button {
     private Drawable selectedImage;
     private boolean isSelected;
 
-    public TabBarButton(Context context){
+    private TabBarButton(Context context){
         super(context);
     }
 

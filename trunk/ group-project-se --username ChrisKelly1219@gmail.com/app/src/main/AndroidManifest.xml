@@ -19,18 +19,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".display_contact"
-            android:label="@string/title_activity_display_contact">
+        <activity
+            android:name=".display_contact"
+            android:label="@string/title_activity_display_contact" >
         </activity>
+
         <receiver android:name=".PhoneCallReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        <!--<activity-->
-            <!--android:name=".MainActivity"-->
-            <!--android:label="@string/title_activity_main" >-->
-        <!--</activity>-->
+        <!-- <activity -->
+        <!-- android:name=".MainActivity" -->
+        <!-- android:label="@string/title_activity_main" > -->
+        <!-- </activity> -->
+        <activity
+            android:name=".GroupActivity"
+            android:label="@string/title_activity_group" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />

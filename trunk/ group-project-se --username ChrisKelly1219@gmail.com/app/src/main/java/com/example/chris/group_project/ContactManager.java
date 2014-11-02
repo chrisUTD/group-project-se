@@ -205,6 +205,10 @@ public class ContactManager
 //        }
 //    }
 
+    public Contact getContactDetails(Contact contactWithoutDetails){
+        return getContactDetails(contactWithoutDetails.getId());
+    }
+
     /**
      * Load all the contact details for a given contact. This method will find the given object by
      * id in the contacts array, and then load the details from the Android ContactProvider, and
@@ -289,8 +293,10 @@ public class ContactManager
     public Contact getContactByCONTACT_ID(String findCONTACT_ID){
         Contact foundContact = null;
         for (Contact contact : contacts){
-            if (contact.getCONTACT_ID() != null && contact.getCONTACT_ID() == findCONTACT_ID){
+            if (contact.getCONTACT_ID() != null
+                    && contact.getCONTACT_ID() == findCONTACT_ID){
                 foundContact = contact;
+                break;
             }
         }
         return foundContact;

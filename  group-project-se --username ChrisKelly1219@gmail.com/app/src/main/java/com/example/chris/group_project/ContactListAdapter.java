@@ -88,8 +88,10 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         }
         return view;
     }
+
     @Override
     public void onClick(View view){
+
         Contact contact = (Contact)view.getTag();
         if (contact != null && contact.getClass() == Contact.class){
             contact =  manager.get(contact.getId()); // make sure the reference is correct

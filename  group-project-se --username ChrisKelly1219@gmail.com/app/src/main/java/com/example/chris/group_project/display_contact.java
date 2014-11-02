@@ -51,6 +51,9 @@ import java.util.ArrayList;
                     if (contactId != null){
                         Contact findContact = ContactManager.getInstance(this).get(contactId);
                         if (findContact != null){
+                            if (!findContact.containsDetails()){
+                                findContact = ContactManager.getInstance(this).getContactDetails(findContact);
+                            }
                             contact = findContact;
                         }
                     }

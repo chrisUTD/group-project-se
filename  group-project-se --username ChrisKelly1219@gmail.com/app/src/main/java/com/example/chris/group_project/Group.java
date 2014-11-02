@@ -9,8 +9,7 @@ import java.util.ArrayList;
 
 public class Group
 {
-    private int id;
-
+    private long id = -1; // "-1" stands in for "null", indicates a group that does not exist in DB
     private String name;
     /**
      * Array that holds Contact objects for the purpose of storing references to Android managed
@@ -20,24 +19,30 @@ public class Group
      * the Android ContactsProvider
      */
     private ArrayList<String> CONTACT_IDs;
+    private boolean containsDetails = false;
+    private boolean containsNewData = false;
 
     public Group(){
         this.CONTACT_IDs = new ArrayList<String>();
     }
 
-    public Group(int id, String name)
-    {
+    public Group(String name){
         this();
-        this.id = id;
         this.name = name;
     }
 
-    public int getId()
+    public Group(int id, String name)
+    {
+        this(name);
+        this.id = id;
+    }
+
+    public long getId()
     {
         return id;
     }
 
-    public void setId(int id)
+    public void setId(long id)
     {
         this.id = id;
     }
@@ -52,7 +57,24 @@ public class Group
         this.name = name;
     }
 
+    public boolean containsDetails() {
+        return containsDetails;
+    }
+
+    public void setContainsDetails(boolean containsDetails) {
+        this.containsDetails = containsDetails;
+    }
+
+    public boolean containsNewData() {
+        return containsNewData;
+    }
+
+    public void setContainsNewData(boolean containsNewData) {
+        this.containsNewData = containsNewData;
+    }
+
     public ArrayList<String> getCONTACT_IDs(){
         return CONTACT_IDs;
     }
+
 }

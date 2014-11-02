@@ -12,12 +12,117 @@
     android:layout_above="@+id/tab_bar">
 
     </android.support.v4.view.ViewPager>
+
     <LinearLayout
         android:id="@+id/tab_bar"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/tab_bar_button_selected_background"
+        android:background="@color/tab_bar_button_background"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="-17dp"></LinearLayout>
+        android:layout_marginTop="-17dp"
+        android:weightSum="3"
+        >
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tab_0"
+            android:orientation="vertical" android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+
+            <View
+                android:id="@+id/tab_button_indicator_0"
+                android:layout_width="wrap_content"
+                android:layout_height="5dp"
+                android:layout_alignParentTop="true"
+                android:visibility="invisible"
+                android:background="@color/tab_bar_button_selected_background"
+
+                />
+
+            <ImageView
+                android:id="@+id/tab_button_image_0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tab_button_indicator_0"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/tab_button_label_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tab_button_image_0"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tab_1"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/tab_button_indicator_1"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_alignParentTop="true"
+                android:visibility="invisible"
+                android:background="@color/tab_bar_button_selected_background"
+
+                />
+
+            <ImageView
+                android:id="@+id/tab_button_image_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tab_button_indicator_1"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/tab_button_label_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tab_button_image_1"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/tab_2"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/tab_button_indicator_2"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_alignParentTop="true"
+                android:visibility="invisible"
+                android:background="@color/tab_bar_button_selected_background"
+                />
+
+            <ImageView
+                android:id="@+id/tab_button_image_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tab_button_indicator_2"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/tab_button_label_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tab_button_image_2"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+
+        </LinearLayout>
 </RelativeLayout>

@@ -37,8 +37,8 @@ public class TabBarButton extends Button {
         this.selectedImage = selectedImage;
         this.label = label;
 
-        findViewById(R.id.tab_button_indicator).setVisibility(View.INVISIBLE);
-        ((ImageView)findViewById(R.id.tab_button_image)).setImageDrawable(defaultImage);
+        view.findViewById(R.id.tab_button_indicator).setVisibility(View.INVISIBLE);
+        ((ImageView)view.findViewById(R.id.tab_button_image)).setImageDrawable(defaultImage);
         getRootView().setBackgroundColor(getContext().getResources().getColor(R.color.tab_bar_button_background));
 
     }

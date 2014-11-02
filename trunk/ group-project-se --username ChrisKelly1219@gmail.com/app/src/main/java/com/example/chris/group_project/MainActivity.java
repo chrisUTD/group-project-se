@@ -48,6 +48,9 @@ public class MainActivity extends Activity {
 
     private static int TAB_COUNT = 3;
     private static String TAB_NAME = "tab_name";
+    private static Integer currentTabIndex = 0;
+
+    private View currentTabView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,43 @@ public class MainActivity extends Activity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        ((TextView)findViewById(R.id.tab_button_label_0)).setText("Contacts");
+        ((TextView)findViewById(R.id.tab_button_label_1)).setText("Groups");
+        ((TextView)findViewById(R.id.tab_button_label_2)).setText("Favorites");
+
+        View tab0 = findViewById(R.id.tab_0);
+        View tab1 = findViewById(R.id.tab_1);
+        View tab2 = findViewById(R.id.tab_2);
+
+        currentTabView = tab0;
+
+        tab0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tabButtonClicked(0);
+            }
+        });
+        tab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tabButtonClicked(1);
+            }
+        });
+        tab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tabButtonClicked(2);
+            }
+        });
+
+    }
+
+    public void tabButtonClicked(Integer index){
+        if (currentTabIndex != index){
+            currentTabIndex = index;
+            mViewPager.setCurrentItem(index, true);
+        }
     }
 
 

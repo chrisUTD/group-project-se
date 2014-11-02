@@ -1,6 +1,9 @@
 package com.example.chris.group_project;
 
 
+import android.net.Uri;
+import android.provider.ContactsContract;
+
 import java.util.ArrayList;
 
 /**
@@ -179,5 +182,10 @@ public class Contact
 
     public void setContainsDetails(boolean containsDetails) {
         this.containsDetails = containsDetails;
+    }
+
+    public Uri getUri()
+    {
+        return ContactsContract.Contacts.getLookupUri(Long.parseLong(getCONTACT_ID()), getLOOKUP_KEY());
     }
 }

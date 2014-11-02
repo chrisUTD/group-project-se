@@ -1,6 +1,7 @@
 package com.example.chris.group_project;
 
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
@@ -301,4 +302,12 @@ public class ContactManager
         }
         return foundContact;
     }
+
+    public void deleteContact(Contact contact)
+    {
+        ContentResolver cr = context.getContentResolver();
+        cr.delete(contact.getUri(),null,null);
+        refresh();
+    }
+
 }

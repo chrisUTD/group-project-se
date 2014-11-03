@@ -1,10 +1,14 @@
 package com.example.chris.group_project;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -13,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -57,8 +63,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
@@ -66,6 +70,23 @@ public class MainActivity extends Activity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                tabChanged(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+        setTitle(tabNames.get(mViewPager.getCurrentItem()));
 
         ((TextView)findViewById(R.id.tab_button_label_0)).setText("Contacts");
         ((TextView)findViewById(R.id.tab_button_label_1)).setText("Groups");
@@ -119,10 +140,19 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_settings:
+                //TODO: ???
+                return true;
+            case R.id.action_add:
+                actionAdd();
+                return true;
+            case R.id.action_search:
+                actionSearch();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -138,6 +168,103 @@ public class MainActivity extends Activity {
         Log.d("Main Activity", "returned on activity result");
 
         ContactManager.getInstance(this).refresh();
+    }
+
+    private void actionAdd(){
+        switch (mViewPager.getCurrentItem()){
+            case 0:
+                launchAddContact();
+                break;
+            case 1:
+                launchAddGroup();
+                break;
+            case 2:
+                //TODO: ???
+                break;
+            default:
+                //nothing
+        }
+    }
+
+    private void actionSearch(){
+        AlertDialog.Builder promptBuilder = new AlertDialog.Builder(this);
+        promptBuilder.setTitle("Search Contacts");
+        final EditText editText = new EditText(this);
+        promptBuilder.setView(editText);
+        String defaultText = "Search for...";
+        editText.setText(defaultText);
+        editText.setSelection(0, defaultText.length());
+
+        final Context activityContext = this;
+
+        promptBuilder.setPositiveButton("Search", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String value = editText.getText().toString();
+                if (value.length() > 0) {
+                    ContactManager.getInstance(activityContext).filterBySearchTerm(value);
+                }
+            }
+        });
+        promptBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ContactManager.getInstance(activityContext).unfilter();
+            }
+        });
+        AlertDialog prompt = promptBuilder.create();
+        prompt.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        prompt.show();
+    }
+
+    private void launchAddContact(){
+        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+
+        intent.putExtra("finishActivityOnSaveCompleted", true);
+        startActivity(intent);
+    }
+
+    private void launchAddGroup(){
+        AlertDialog.Builder promptBuilder = new AlertDialog.Builder(this);
+        promptBuilder.setTitle("Add New Group");
+        final EditText editText = new EditText(this);
+        promptBuilder.setView(editText);
+        String defaultText = "Group Name";
+        editText.setText(defaultText);
+        editText.setSelection(0, defaultText.length());
+
+        final Context activityContext = this;
+
+        promptBuilder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String value = editText.getText().toString();
+                if (value.length() > 0) {
+                    Group newGroup = new Group(value);
+                    newGroup = GroupManager.getInstance(getApplicationContext()).insert(new Group(value));
+
+                    Intent displayGroupIntent = new Intent(activityContext, GroupActivity.class);
+                    if (newGroup.getId() != -1) {
+                        displayGroupIntent.putExtra("groupId", newGroup.getId());
+                    }
+                    activityContext.startActivity(displayGroupIntent);
+                }
+            }
+        });
+        promptBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Do nothing.
+            }
+        });
+        AlertDialog prompt = promptBuilder.create();
+        prompt.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        prompt.show();
+    }
+
+    private void tabChanged(Integer index){
+        setTitle(tabNames.get(index));
     }
 
     /**
@@ -194,6 +321,8 @@ public class MainActivity extends Activity {
         }
     }
 
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -235,7 +364,7 @@ public class MainActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            ((TextView)rootView.findViewById(R.id.section_label)).setText(section_name);
+//            ((TextView)rootView.findViewById(R.id.section_label)).setText(section_name);
             ContactListAdapter adapter = new ContactListAdapter(getActivity(),
                     R.layout.contact_list_item_view,
                     ContactManager.getInstance(getActivity()),
@@ -288,7 +417,7 @@ public class MainActivity extends Activity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_groups_list, container, false);
 
-            ((TextView)rootView.findViewById(R.id.section_label)).setText(section_name);
+//            ((TextView)rootView.findViewById(R.id.section_label)).setText(section_name);
             GroupsListAdapter adapter = new GroupsListAdapter(getActivity(),
                     R.layout.group_list_item_view,
                     GroupManager.getInstance(getActivity())

@@ -11,11 +11,12 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int contact_list_background=0x7f040000;
-        public static final int contact_list_selected_background=0x7f040001;
-        public static final int dark_gray=0x7f040002;
-        public static final int tab_bar_button_background=0x7f040003;
-        public static final int tab_bar_button_selected_background=0x7f040004;
+        public static final int activity_background=0x7f040000;
+        public static final int contact_list_background=0x7f040001;
+        public static final int contact_list_selected_background=0x7f040002;
+        public static final int dark_gray=0x7f040003;
+        public static final int tab_bar_button_background=0x7f040004;
+        public static final int tab_bar_button_selected_background=0x7f040005;
     }
     public static final class dimen {
         public static final int activity_horizontal_margin=0x7f050000;
@@ -24,10 +25,15 @@ public final class R {
         public static final int phoneNumberSize=0x7f050003;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int ic_action_new=0x7f020000;
+        public static final int ic_action_search=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_settings=0x7f090027;
+        public static final int action_add=0x7f090027;
+        public static final int action_delete=0x7f09002a;
+        public static final int action_search=0x7f090028;
+        public static final int action_settings=0x7f090029;
         public static final int contact_list_item_image=0x7f090011;
         public static final int contact_list_item_text=0x7f090012;
         public static final int contacts_list_view=0x7f090015;
@@ -35,7 +41,7 @@ public final class R {
         public static final int editText=0x7f090010;
         public static final int group_list_item_image=0x7f090016;
         public static final int group_list_item_text=0x7f090017;
-        public static final int groups_list_view=0x7f090014;
+        public static final int groups_list_view=0x7f090013;
         public static final int horizontalScrollView=0x7f090023;
         public static final int linearLayout=0x7f090018;
         public static final int linearLayout2=0x7f09001b;
@@ -48,7 +54,7 @@ public final class R {
         public static final int phoneNumberString=0x7f09000f;
         public static final int sc_Image=0x7f09001f;
         public static final int sc_Name=0x7f090020;
-        public static final int section_label=0x7f090013;
+        public static final int section_label=0x7f090014;
         public static final int show_contact=0x7f09001e;
         public static final int tab_0=0x7f090003;
         public static final int tab_1=0x7f090007;
@@ -86,6 +92,7 @@ public final class R {
         public static final int group=0x7f080000;
         public static final int main=0x7f080001;
         public static final int my=0x7f080002;
+        public static final int show_contact=0x7f080003;
     }
     public static final class string {
         public static final int action_settings=0x7f060000;

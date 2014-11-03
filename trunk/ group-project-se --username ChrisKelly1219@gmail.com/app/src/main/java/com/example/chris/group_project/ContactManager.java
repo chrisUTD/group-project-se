@@ -5,18 +5,51 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 /**
  * Created by nahuecht on 10/20/2014.
  */
-public class ContactManager
-{
+public class ContactManager implements ModelChangeNotifier {
     private ArrayList<Contact> contacts;
+    private ArrayList<Contact> filteredContacts;
     private static ContactManager instance;
     private static Context context;
     private static Integer count;
+    private boolean filtered = false;
+
+    /*************************** MODEL CHANGE NOTIFIER IMPLEMENTATION *****************************/
+    private static ArrayList<ModelChangeListener> listeners = new ArrayList<ModelChangeListener>();
+
+    @Override
+    public void notifyListeners(ModelChangeNotifier model){
+        if (listeners != null && listeners.size() != 0) {
+            for (ModelChangeListener l : listeners) {
+                if (l != null) { // Needed?
+                    l.onModelChange(model);
+                }
+            }
+        }
+    }
+    @Override
+    public void registerListener(ModelChangeListener listener){
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+    @Override
+    public void unregisterListener(ModelChangeListener listener){
+        if (listeners != null){
+            listeners.remove(listener);
+        }
+    }
+    @Override
+    public void touch(){
+        notifyListeners(this);
+    }
+    /**********************************************************************************************/
 
     /* I think this is the right idea here but im not really sure.
      * Also this is an n^2 search because arraylist is already slow and
@@ -70,6 +103,7 @@ public class ContactManager
     private ContactManager(Context context){
         this.context = context;
         contacts = new ArrayList<Contact>();
+        filteredContacts = new ArrayList<Contact>();
         count = 0;
         load();
     }
@@ -115,7 +149,7 @@ public class ContactManager
         //Log.d("ContactManager", "load()");
 
         Cursor contactCursor = context.getContentResolver().query(
-                ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " ASC");
+                ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " COLLATE NOCASE ASC");
         if (contactCursor.getCount() > 0){
             while (contactCursor.moveToNext()){
 
@@ -172,7 +206,9 @@ public class ContactManager
                 contact.setContainsDetails(false);
                 contacts.add(contact);
             }
+            filteredContacts = new ArrayList<Contact>(contacts);
             contactCursor.close();
+            notifyListeners(this);
         }
     }
 
@@ -192,7 +228,7 @@ public class ContactManager
      * JRContactManager.getContactDetails(contactId) for the contact whose details you want to load
      */
     public ArrayList<Contact> contacts(){
-        return contacts;
+        return filteredContacts;
     }
 
     /**
@@ -301,6 +337,38 @@ public class ContactManager
             }
         }
         return foundContact;
+    }
+
+    public ArrayList<Contact> filterBySearchTerm(String term){
+        Log.d("CONTACT MANAGER", "filterBySearchTerm: " + term);
+        filteredContacts.clear();
+        for (Contact c : contacts){
+            Log.d("CONTACT MANAGER", "calling search on contact "+ c.getDisplayName());
+           if (c.search(term)){
+               filteredContacts.add(c);
+           }
+        }
+        notifyListeners(this);
+        return filteredContacts;
+    }
+
+    public ArrayList<Contact> filterByGroup(long groupId, GroupManager groupManager){
+        filteredContacts.clear();
+
+        for (Contact c : contacts){
+            if (groupManager.contactIsInGroup(c, groupId)){
+                filteredContacts.add(c);
+            }
+        }
+
+        notifyListeners(this);
+        return filteredContacts;
+    }
+
+    public ArrayList<Contact> unfilter(){
+        filteredContacts = contacts;
+        notifyListeners(this);
+        return filteredContacts;
     }
 
     public void deleteContact(Contact contact)

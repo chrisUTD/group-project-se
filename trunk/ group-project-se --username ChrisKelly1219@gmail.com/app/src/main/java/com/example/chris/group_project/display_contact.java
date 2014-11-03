@@ -139,7 +139,7 @@ import java.util.ArrayList;
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
             // Inflate the menu; this adds items to the action bar if it is present.
-            getMenuInflater().inflate(R.menu.my, menu);
+            getMenuInflater().inflate(R.menu.show_contact, menu);
             return true;
         }
 
@@ -149,12 +149,15 @@ import java.util.ArrayList;
             // automatically handle clicks on the Home/Up button, so long
             // as you specify a parent activity in AndroidManifest.xml.
             int id = item.getItemId();
-            if (id == R.id.action_settings) {
-                return true;
+            switch (id){
+                case R.id.action_delete:
+                    ContactManager.getInstance(this).deleteContact(contact);
+                    finish();
+                    return true;
+                default:
+                    return true;
             }
-            return super.onOptionsItemSelected(item);
         }
-
 
         //TODO: ADD THIS CODE TO SOME CLICK LISTENER FOR LAUNCHING EDIT SCREEN
         // assumes that you have an object named 'contact' for which you want to launch the edit screen.

@@ -11,13 +11,44 @@ import java.util.ArrayList;
 /**
  * Created by nahuecht on 10/20/2014.
  */
-public class GroupManager
-{
+public class GroupManager implements ModelChangeNotifier {
     private ArrayList<Group> groups;
     private static GroupManager instance;
     private GroupDbHelper dbHelper;
     private SQLiteDatabase database;
     private Context context;
+
+    /*************************** MODEL CHANGE NOTIFIER IMPLEMENTATION *****************************/
+    private static ArrayList<ModelChangeListener> listeners = new ArrayList<ModelChangeListener>();
+
+    @Override
+    public void notifyListeners(ModelChangeNotifier model){
+        if (listeners != null && listeners.size() != 0) {
+            for (ModelChangeListener l : listeners) {
+                if (l != null) { // Needed?
+                    l.onModelChange(model);
+                }
+            }
+        }
+    }
+    @Override
+    public void registerListener(ModelChangeListener listener){
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+    @Override
+    public void unregisterListener(ModelChangeListener listener){
+        if (listeners != null){
+            listeners.remove(listener);
+        }
+    }
+    @Override
+    public void touch(){
+        notifyListeners(this);
+    }
+    /**********************************************************************************************/
+
 
     private GroupManager(Context context){
         this.context = context;
@@ -77,6 +108,7 @@ public class GroupManager
             g.setContainsNewData(false);
             groups.add(g);
         }
+        notifyListeners(this);
     }
 
     public Group getGroupDetails(Group group){
@@ -114,6 +146,8 @@ public class GroupManager
                 group.setId(newRowId);
             }
         }
+        groups.add(group);
+        notifyListeners(this);
         return group;
     }
 
@@ -134,6 +168,7 @@ public class GroupManager
             String[] contactToGroupSelectionArgs = { String.valueOf(group.getId())};
             db.delete(GroupContract.ContactToGroup.TABLE_NAME, contactToGroupSelection, contactToGroupSelectionArgs);
         }
+        notifyListeners(this);
     }
 
     public void addContactsToGroup(ArrayList<Contact> contactsToAdd, Group group) {
@@ -146,6 +181,20 @@ public class GroupManager
                 }
             }
         }
+        notifyListeners(this);
+    }
+
+    public boolean contactIsInGroup(Contact findContact, long groupId){
+        for (Group g : groups){
+            if (g.getId() == groupId){
+                for (String CONTACT_ID : g.getCONTACT_IDs()){
+                    if (CONTACT_ID == findContact.getCONTACT_ID()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void insertContactIdForGroup(String CONTACT_ID, Group group){
@@ -166,6 +215,8 @@ public class GroupManager
             // TODO: something special to make the contact blacklisted, if possible.
         }
     }
+
+
 
 
     /**

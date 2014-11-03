@@ -9,15 +9,32 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Jonny on 10/27/14.
  */
-public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnClickListener {
+public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnClickListener, ModelChangeListener {
 
     private GroupManager manager;
     private Context context;
+
+    /************************** MODEL CHANGE LISTENER IMPLEMENTATION ******************************/
+    private ArrayList<ModelChangeNotifier> notifiers = new ArrayList<ModelChangeNotifier>();
+
+    public void onModelChange(ModelChangeNotifier model) {
+        notifyDataSetChanged();
+    }
+
+    public void unregister() {
+        for (ModelChangeNotifier n : notifiers) {
+            if (n != null) {
+                n.unregisterListener(this);
+            }
+        }
+    }
+    /**********************************************************************************************/
 
     private GroupsListAdapter(Context context, int textViewResourceId){
         super(context, textViewResourceId);
@@ -31,6 +48,8 @@ public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnCli
         this(context, resource, manager.getGroups());
         this.manager = manager;
         this.context = context;
+
+        manager.registerListener(this);
     }
 
     @Override

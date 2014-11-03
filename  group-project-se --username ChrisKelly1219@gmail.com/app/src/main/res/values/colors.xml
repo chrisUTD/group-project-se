@@ -4,7 +4,8 @@
     <item type="color" name="tab_bar_button_selected_background">#ffb1ceff</item>
     <item type="color" name="tab_bar_button_background">#ffd6dadd</item>
     <item type="color" name="dark_gray">#ff3e4041</item>
-    <item type="color" name="contact_list_background">#fff8fcff</item>
+    <item type="color" name="activity_background">#fff2efef</item>
+    <item type="color" name="contact_list_background">#fff2efef</item>
     <item type="color" name="contact_list_selected_background">#ff577fd1</item>
 
 </resources>

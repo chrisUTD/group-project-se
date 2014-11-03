@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by Jonny on 10/27/14.
  */
-public class ContactListAdapter extends ArrayAdapter<Contact> implements View.OnClickListener {
+public class ContactListAdapter extends ArrayAdapter<Contact> implements View.OnClickListener, ModelChangeListener {
 
     /**
      * Enum to support the "mode" that the listview can be in, principally whether clicking on a list
@@ -29,11 +29,37 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         SELECT_ON_CLICK
     }
 
+    public enum ContactListFilter {
+        NONE,
+        GROUP,
+        STARRED
+    }
+
     private ContactManager manager;
     private Context context;
     private ContactListMode mode = ContactListMode.SHOW_DETAILS_ON_CLICK;
     private static ArrayList<Integer> selectedItems;
-    
+
+    private ContactListFilter filter = ContactListFilter.NONE;
+    private int groupFilterId = -1;
+
+
+    /************************** MODEL CHANGE LISTENER IMPLEMENTATION ******************************/
+    private ArrayList<ModelChangeNotifier> notifiers = new ArrayList<ModelChangeNotifier>();
+
+    public void onModelChange(ModelChangeNotifier model) {
+        notifyDataSetChanged();
+    }
+
+    public void unregister() {
+        for (ModelChangeNotifier n : notifiers) {
+            if (n != null) {
+                n.unregisterListener(this);
+            }
+        }
+    }
+    /**********************************************************************************************/
+
     private ContactListAdapter(Context context, int textViewResourceId){
         super(context, textViewResourceId);
     }
@@ -49,11 +75,24 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         if (selectedItems == null) {
             this.selectedItems = new ArrayList<Integer>();
         }
+
+        manager.registerListener(this);
     }
 
     public ContactListAdapter(Context context, int resource, ContactManager manager, ContactListMode mode){
         this(context, resource, manager);
         setMode(mode);
+    }
+
+    public ContactListAdapter(Context context, int resource, ContactManager manager, ContactListMode mode, ContactListFilter filter){
+        this(context, resource, manager);
+        setMode(mode);
+        setContactListFilter(filter);
+    }
+
+    @Override
+    public int getCount() {
+        return manager.contacts().size();
     }
 
     @Override
@@ -145,8 +184,23 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         selectedItems.remove(selectedItems.indexOf(position));
     }
 
-
     public ArrayList<Integer> getSelectedItems(){
         return selectedItems;
+    }
+
+    public ContactListFilter getContactListFilter() {
+        return filter;
+    }
+
+    public void setContactListFilter(ContactListFilter filter) {
+        this.filter = filter;
+    }
+
+    public int getGroupFilterId() {
+        return groupFilterId;
+    }
+
+    public void setGroupFilterId(int groupFilterId) {
+        this.groupFilterId = groupFilterId;
     }
 }

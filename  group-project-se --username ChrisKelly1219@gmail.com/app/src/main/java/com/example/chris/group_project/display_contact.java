@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -74,8 +75,8 @@ import java.util.ArrayList;
             phoneListView = (ListView) findViewById(R.id.phone_number_listView);
             emailListView = (ListView) findViewById(R.id.email_list_view);
 
-
             populateList();
+            populateContactGroupView();
         }
 
         private void populateList()
@@ -87,7 +88,40 @@ import java.util.ArrayList;
             emailListView.setAdapter((emailAdapter));
         }
 
+       private void populateContactGroupView()
+       {
+           LinearLayout temp = (LinearLayout) findViewById(R.id.display_groups);
+           ArrayList<Button> groups = createGroupBtns();
+           addGroupButtonsToView(temp,groups);
+       }
 
+        private ArrayList<Button> createGroupBtns()
+        {
+            ArrayList<Button> groupBs = new ArrayList<Button>();
+            GroupManager manager;
+
+            for(int i=0;i<9;i++)
+            {
+                Button btn = new Button(this);
+                btn.setText("Group "+i);
+                groupBs.add(btn);
+            }
+
+            return groupBs;
+        }
+
+        private void addGroupButtonsToView(LinearLayout temp,ArrayList<Button> groups)
+        {
+            for(int i=0;i<groups.size();i++)
+            {
+                temp.addView(
+                        groups.get(i),
+                        new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT)
+                );
+            }
+        }
 
 
 

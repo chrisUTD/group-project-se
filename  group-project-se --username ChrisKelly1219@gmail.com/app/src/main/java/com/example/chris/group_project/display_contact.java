@@ -21,10 +21,12 @@ import java.util.ArrayList;
 
     public class display_contact  extends Activity
     {
-        ListView contactListView;
+        ListView phoneListView;
+        ListView emailListView;
         Contact contact;
         ImageView picture;
         TextView name;
+
 
         /**
          * Empty constructor, used when launching activity via intent.
@@ -69,16 +71,24 @@ import java.util.ArrayList;
             if(contact.getPhotoUri() != null) {
                 picture.setImageURI(Uri.parse(contact.getPhotoUri()));
             }
+            phoneListView = (ListView) findViewById(R.id.phone_number_listView);
+            emailListView = (ListView) findViewById(R.id.email_list_view);
 
 
-           // populateList(); //TODO: fix null pointer exception on this method
+            populateList();
         }
-        //TODO: Fix this: contactListView has not yet been found, so this method throws null exception
+
         private void populateList()
         {
-            ArrayAdapter<String> adapter = new phoneNumberListAdapter();
-            contactListView.setAdapter((adapter));
+            ArrayAdapter<String> phoneNumberAdapter = new phoneNumberListAdapter();
+            phoneListView.setAdapter((phoneNumberAdapter));
+
+            ArrayAdapter<String> emailAdapter = new emailListAdapter();
+            emailListView.setAdapter((emailAdapter));
         }
+
+
+
 
 
         private class phoneNumberListAdapter extends ArrayAdapter<String>
@@ -100,8 +110,8 @@ import java.util.ArrayList;
                 Button callButton = (Button) view.findViewById(R.id.listCallContactButton);
                 Button textButton = (Button) view.findViewById(R.id.listTextContactButton);
                 ArrayList<String> tempNum = contact.getPhoneNumbers();
-                final String temp = tempNum.get(position);
-                number.setText(temp);
+                final String phoneNumber = tempNum.get(position);
+                number.setText(phoneNumber);
 
                 callButton.setOnClickListener( new View.OnClickListener()
                 {
@@ -109,7 +119,7 @@ import java.util.ArrayList;
                     {
 
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        callIntent.setData(Uri.parse("tel:"+temp));
+                        callIntent.setData(Uri.parse("tel:"+phoneNumber));
                         startActivity(Intent.createChooser(callIntent, "Call"));
 
                         startActivity(callIntent);
@@ -122,14 +132,49 @@ import java.util.ArrayList;
                     {
                         Intent smsIntent = new Intent(Intent.ACTION_VIEW);
                         smsIntent.setType("vnd.android-dir/mms-sms");
-                        smsIntent.putExtra("address", "12125551212");
+                        smsIntent.putExtra("address",phoneNumber);
                         smsIntent.putExtra("sms_body","");
                         startActivity(smsIntent);
                    }
-
                 });
 
 
+
+                return view;
+            }
+
+        }
+
+        private class emailListAdapter extends ArrayAdapter<String>
+        {
+            public emailListAdapter()
+            {
+                super (display_contact.this, R.layout.email_list_view, contact.getEmailAddresses());
+            }
+
+            @Override
+            public View getView(int position, View view, ViewGroup parent)
+            {
+                if (view == null) {
+                    view = getLayoutInflater().inflate(R.layout.email_list_view, parent, false);
+                }
+                TextView email = (TextView) view.findViewById(R.id.email_list_view_item);
+                Button mailButton = (Button) view.findViewById(R.id.send_email_button);
+                ArrayList<String> emailArray = contact.getEmailAddresses();
+                final String emailAddress = emailArray.get(position);
+                email.setText(emailAddress);
+
+                 mailButton.setOnClickListener( new View.OnClickListener()
+                {
+                    public void onClick(View temp)
+                    {
+
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                 "mailto","abc@gmail.com", null));
+                          emailIntent.putExtra(Intent.EXTRA_SUBJECT, "EXTRA_SUBJECT");
+                         startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                    }
+                });
 
                 return view;
             }

@@ -2,13 +2,14 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout" >
+        android:layout_width="190dp"
+        android:layout_height="45dp"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,21 +31,21 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayout2" >
+        android:id="@+id/linearLayout2"
+        android:gravity="right">
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="75dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="Call"
             android:id="@+id/listCallContactButton" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="75dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:text="Text"
-            android:id="@+id/listTextContactButton"
-            android:layout_marginLeft="20dp" />
+            android:id="@+id/listTextContactButton" />
     </LinearLayout>
 </LinearLayout>

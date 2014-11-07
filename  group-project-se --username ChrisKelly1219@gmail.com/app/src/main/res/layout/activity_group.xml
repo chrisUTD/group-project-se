@@ -4,4 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.chris.group_project.GroupActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame" >
+<ListView
+android:id="@+id/contacts_list_view"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:layout_alignParentBottom="true"
+android:layout_margin="-6dp"
+android:padding="0dp"></ListView>
+    </FrameLayout>

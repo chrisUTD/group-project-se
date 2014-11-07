@@ -187,14 +187,29 @@ public class GroupManager implements ModelChangeNotifier {
     public boolean contactIsInGroup(Contact findContact, long groupId){
         for (Group g : groups){
             if (g.getId() == groupId){
-                for (String CONTACT_ID : g.getCONTACT_IDs()){
-                    if (CONTACT_ID == findContact.getCONTACT_ID()){
-                        return true;
-                    }
-                }
+                return contactIsInGroup(findContact, g);
             }
         }
         return false;
+    }
+
+    public boolean contactIsInGroup(Contact findContact, Group group){
+        for (String CONTACT_ID : group.getCONTACT_IDs()){
+            if (CONTACT_ID == findContact.getCONTACT_ID()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<Group> getGroupsForContact(Contact contact){
+        ArrayList<Group> groupsForContact = new ArrayList<Group>();
+        for (Group g : groups){
+            if (contactIsInGroup(contact, g)){
+                groupsForContact.add(g);
+            }
+        }
+        return groupsForContact;
     }
 
     private void insertContactIdForGroup(String CONTACT_ID, Group group){
@@ -215,9 +230,6 @@ public class GroupManager implements ModelChangeNotifier {
             // TODO: something special to make the contact blacklisted, if possible.
         }
     }
-
-
-
 
     /**
      * Private class to provide access to the SQLite database. It is included as a private subclass
@@ -240,5 +252,6 @@ public class GroupManager implements ModelChangeNotifier {
             //TODO: Does this need to be implemented?
         }
     }
+
 
 }

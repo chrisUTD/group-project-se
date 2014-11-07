@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 public class GroupActivity extends Activity {
 
+    private Integer groupId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +23,15 @@ public class GroupActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        groupId = getIntent().getExtras().getInt("groupId");
+        if (groupId != null){
+
+
+
+
+        }
+
     }
 
 

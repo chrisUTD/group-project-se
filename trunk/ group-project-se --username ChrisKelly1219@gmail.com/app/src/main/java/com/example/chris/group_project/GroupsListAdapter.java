@@ -72,6 +72,11 @@ public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnCli
     }
 
     @Override
+    public int getCount() {
+        return manager.getGroups().size();
+    }
+
+    @Override
     public void onClick(View view){
 
         Group group = (Group)view.getTag();

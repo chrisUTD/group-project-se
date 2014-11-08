@@ -136,9 +136,9 @@ import java.util.ArrayList;
 
        private void populateContactGroupView()
        {
-           LinearLayout temp = (LinearLayout) findViewById(R.id.display_groups);
-           ArrayList<Button> groups = createGroupBtns();
-           addGroupButtonsToView(temp,groups);
+          // LinearLayout temp = (LinearLayout) findViewById(R.id.display_groups);
+           //ArrayList<Button> groups = createGroupBtns();
+           //addGroupButtonsToView(temp,groups);
        }
 
         private ArrayList<Button> createGroupBtns()

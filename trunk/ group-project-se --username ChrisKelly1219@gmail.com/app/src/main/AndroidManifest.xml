@@ -37,6 +37,10 @@
             android:name=".GroupActivity"
             android:label="@string/title_activity_group" >
         </activity>
+        <activity
+            android:name=".ContactPickerActivity"
+            android:label="@string/title_activity_contact_picker" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />

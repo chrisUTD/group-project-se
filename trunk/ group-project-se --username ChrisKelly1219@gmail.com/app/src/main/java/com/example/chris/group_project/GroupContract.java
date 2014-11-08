@@ -66,12 +66,12 @@ public final class GroupContract {
             "DROP TABLE IF EXISTS " + Group.TABLE_NAME;
 
     /**
-     * SQL Command to create ContactToGrop table
+     * SQL Command to create ContactToGroup table
      */
     public static final String SQL_CREATE_CONTACT_TO_GROUP_TABLE =
             "CREATE TABLE " + ContactToGroup.TABLE_NAME + " (" +
                     ContactToGroup._ID + " INTEGER PRIMARY KEY," +
-                    ContactToGroup.COLUMN_NAME_CONTACT_ID + " TEXT" +
+                    ContactToGroup.COLUMN_NAME_CONTACT_ID + " TEXT," +
                     ContactToGroup.COLUMN_NAME_GROUP_ID + " INTEGER" +
                     " )";
     /**

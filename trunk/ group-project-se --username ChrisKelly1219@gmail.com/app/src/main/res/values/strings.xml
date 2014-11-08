@@ -11,5 +11,8 @@
     <string name="title_section3">Section 3</string>
     <string name="title_activity_group">GroupActivity</string>
     <string name="group_detail_placeholder">Display Group Contact Lists HERE</string>
+    <string name="title_activity_contact_picker">Pick contacts...</string>
+    <string name="button_text_done">Pick</string>
+    <string name="button_text_cancel">Cancel</string>
 
 </resources>

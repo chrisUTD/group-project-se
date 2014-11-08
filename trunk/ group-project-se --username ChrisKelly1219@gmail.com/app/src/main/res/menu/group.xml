@@ -5,4 +5,8 @@
         android:icon="@drawable/ic_action_new"
         android:title="Add"
         android:showAsAction="always" />
+    <item
+        android:id="@+id/action_delete_group"
+        android:title="Delete Group"
+        android:showAsAction="never" />
 </menu>

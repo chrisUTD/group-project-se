@@ -68,7 +68,9 @@ public class GroupManager implements ModelChangeNotifier {
 
     public Group get(long groupId){
         Group foundGroup = null;
+       // Log.d("GET GROUP num of groups: ", ""+groups.size());
         for (Group g : groups){
+            //Log.d("get GROUP", "groupId input: " + groupId + "g id: " + g.getId() + " " + g.getName() );
             if (g.getId() == groupId){
                 foundGroup = g;
                 break;
@@ -112,6 +114,25 @@ public class GroupManager implements ModelChangeNotifier {
     }
 
     public Group getGroupDetails(Group group){
+        group.getCONTACT_IDs().clear();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                GroupContract.ContactToGroup.TABLE_NAME, // table name
+                null, // project, column to return
+                GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID + " = ? ", // selection, columns for WHERE
+                new String[]{""+group.getId()}, // selection, values for WHERE
+                null, // don't group rows
+                null, // don't filter by row
+                GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID + " ASC" // order by id
+        );
+
+        while (cursor.moveToNext()){
+            group.getCONTACT_IDs().add(""+cursor.getLong(cursor.getColumnIndex(GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID)));
+
+            group.setContainsDetails(true);
+        }
+        notifyListeners(this);
         return group;
     }
 
@@ -172,12 +193,14 @@ public class GroupManager implements ModelChangeNotifier {
     }
 
     public void addContactsToGroup(ArrayList<Contact> contactsToAdd, Group group) {
+        getGroupDetails(group);
         for (Contact contact : contactsToAdd) {
             String contactIdToAdd = contact.getCONTACT_ID();
             if (contactIdToAdd != null) {
-                if (!group.getCONTACT_IDs().contains(contactIdToAdd)) {
+                Contact contactToAdd = ContactManager.getInstance(context).getContactByCONTACT_ID(contactIdToAdd);
+                if (!contactIsInGroup(contactToAdd, group)) {
                     insertContactIdForGroup(contactIdToAdd, group); // ADD TO DATABASE
-                    group.getCONTACT_IDs().add(contact.getCONTACT_ID());
+                    getGroupDetails(group); // refreshes the data
                 }
             }
         }
@@ -194,8 +217,9 @@ public class GroupManager implements ModelChangeNotifier {
     }
 
     public boolean contactIsInGroup(Contact findContact, Group group){
+        getGroupDetails(group);
         for (String CONTACT_ID : group.getCONTACT_IDs()){
-            if (CONTACT_ID == findContact.getCONTACT_ID()){
+            if (CONTACT_ID.compareTo(findContact.getCONTACT_ID()) == 0){
                 return true;
             }
         }
@@ -217,13 +241,18 @@ public class GroupManager implements ModelChangeNotifier {
                 && CONTACT_ID != null){
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-            ContentValues values = new ContentValues();
-            values.put(GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID, CONTACT_ID);
-            values.put(GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID, group.getId());
+//            ContentValues values = new ContentValues();
+//            values.put(GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID, CONTACT_ID);
+//            values.put(GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID, group.getId());
+//
+//            db.insert(GroupContract.ContactToGroup.TABLE_NAME,
+//                    null,
+//                    values);
 
-            db.insert(GroupContract.ContactToGroup.TABLE_NAME,
-                    null,
-                    values);
+            db.execSQL("INSERT INTO " + GroupContract.ContactToGroup.TABLE_NAME + "" +
+                    "("+GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID+", " +
+                    GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID+")" +
+                    " VALUES('"+ CONTACT_ID +"', " + group.getId() + " );");
         }
 
         if (group.getName().toUpperCase() == "BLACKLIST"){

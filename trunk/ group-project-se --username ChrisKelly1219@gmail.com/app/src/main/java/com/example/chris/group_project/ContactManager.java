@@ -5,7 +5,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -329,9 +328,10 @@ public class ContactManager implements ModelChangeNotifier {
      */
     public Contact getContactByCONTACT_ID(String findCONTACT_ID){
         Contact foundContact = null;
+
         for (Contact contact : contacts){
             if (contact.getCONTACT_ID() != null
-                    && contact.getCONTACT_ID() == findCONTACT_ID){
+                    && Long.parseLong(contact.getCONTACT_ID()) == Long.parseLong(findCONTACT_ID)){
                 foundContact = contact;
                 break;
             }
@@ -340,10 +340,8 @@ public class ContactManager implements ModelChangeNotifier {
     }
 
     public ArrayList<Contact> filterBySearchTerm(String term){
-        Log.d("CONTACT MANAGER", "filterBySearchTerm: " + term);
         filteredContacts.clear();
         for (Contact c : contacts){
-            Log.d("CONTACT MANAGER", "calling search on contact "+ c.getDisplayName());
            if (c.search(term)){
                filteredContacts.add(c);
            }
@@ -355,9 +353,13 @@ public class ContactManager implements ModelChangeNotifier {
     public ArrayList<Contact> filterByGroup(long groupId, GroupManager groupManager){
         filteredContacts.clear();
 
-        for (Contact c : contacts){
-            if (groupManager.contactIsInGroup(c, groupId)){
-                filteredContacts.add(c);
+        Group group = groupManager.get(groupId);
+        groupManager.getGroupDetails(group);
+
+        for (String contactId : group.getCONTACT_IDs()){
+            Contact contact = getContactByCONTACT_ID(contactId);
+            if (contact != null){
+                filteredContacts.add(contact);
             }
         }
 

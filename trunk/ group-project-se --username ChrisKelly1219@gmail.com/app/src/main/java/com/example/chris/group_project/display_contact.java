@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,9 @@ import java.util.ArrayList;
         Contact contact;
         ImageView picture;
         TextView name;
+        ArrayAdapter<String> phoneNumberAdapter;
+        ArrayAdapter<String> emailAdapter;
+        private static int cNum;
 
 
         /**
@@ -34,15 +38,21 @@ import java.util.ArrayList;
          */
         public display_contact(){}
 
-        public display_contact( Contact temp)
-        {
-            contact = temp;
-        }
+
 
         @Override
         protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
+            setContact();
+            setContentView(R.layout.show_contact);
+            populateItems();
+
+        }
+
+        private void setContact()
+        {
+
 
             // Retrieve the contact id passed through the intent when this activity is launched
             // the retrieve contact and set it as this.contact
@@ -62,29 +72,65 @@ import java.util.ArrayList;
                     }
                 }
             }
+        }
 
-            setContentView(R.layout.show_contact);
-
-            name = (TextView) findViewById(R.id.sc_Name);
-            picture = (ImageView) findViewById(R.id.sc_Image);
-
-            name.setText(contact.getDisplayName());
-            if(contact.getPhotoUri() != null) {
-                picture.setImageURI(Uri.parse(contact.getPhotoUri()));
-            }
-            phoneListView = (ListView) findViewById(R.id.phone_number_listView);
-            emailListView = (ListView) findViewById(R.id.email_list_view);
-
-            populateList();
+        private void populateItems()
+        {
+            createNameView();
+            createImageView();
+            createEditButton();
+            CreatePhoneListView();
+            CreateEmailListView();
             populateContactGroupView();
         }
 
-        private void populateList()
+        private void createNameView()
         {
-            ArrayAdapter<String> phoneNumberAdapter = new phoneNumberListAdapter();
-            phoneListView.setAdapter((phoneNumberAdapter));
+            name = (TextView) findViewById(R.id.sc_Name);
+            name.setText(contact.getDisplayName());
 
-            ArrayAdapter<String> emailAdapter = new emailListAdapter();
+        }
+
+        private void createImageView()
+        {
+            picture = (ImageView) findViewById(R.id.sc_Image);
+
+            if(contact.getPhotoUri() != null) {
+                picture.setImageURI(Uri.parse(contact.getPhotoUri()));
+            }
+        }
+
+        private void createEditButton()
+        {
+            cNum = contact.getId();
+            Button edit = (Button) findViewById(R.id.edit_contact_button);
+
+            edit.setOnClickListener( new View.OnClickListener()
+            {
+                public void onClick(View temp)
+                {
+                    Uri lookupUri = ContactsContract.Contacts.getLookupUri(Long.parseLong(contact.getCONTACT_ID()), contact.getLOOKUP_KEY());
+
+                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                    editIntent.setDataAndType(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+                    editIntent.putExtra("finishActivityOnSaveCompleted", true);
+                    startActivityForResult(editIntent,0);
+                }
+            });
+
+        }
+
+        private void CreatePhoneListView()
+        {
+            phoneListView = (ListView) findViewById(R.id.phone_number_listView);
+            phoneNumberAdapter = new phoneNumberListAdapter();
+            phoneListView.setAdapter((phoneNumberAdapter));
+        }
+
+        private void CreateEmailListView()
+        {
+            emailListView = (ListView) findViewById(R.id.email_list_view);
+            emailAdapter = new emailListAdapter();
             emailListView.setAdapter((emailAdapter));
         }
 
@@ -98,12 +144,13 @@ import java.util.ArrayList;
         private ArrayList<Button> createGroupBtns()
         {
             ArrayList<Button> groupBs = new ArrayList<Button>();
-            GroupManager manager;
+            GroupManager manager = GroupManager.getInstance(this);
+            ArrayList<Group> groupHolder = manager.getGroupsForContact(contact);
 
-            for(int i=0;i<9;i++)
+            for(int i=0;i<groupHolder.size();i++)
             {
                 Button btn = new Button(this);
-                btn.setText("Group "+i);
+                btn.setText(groupHolder.get(i).getName());
                 groupBs.add(btn);
             }
 
@@ -204,7 +251,7 @@ import java.util.ArrayList;
                     {
 
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                 "mailto","abc@gmail.com", null));
+                                 "mailto",emailAddress, null));
                           emailIntent.putExtra(Intent.EXTRA_SUBJECT, "EXTRA_SUBJECT");
                          startActivity(Intent.createChooser(emailIntent, "Send email..."));
                     }
@@ -238,16 +285,15 @@ import java.util.ArrayList;
             }
         }
 
-        //TODO: ADD THIS CODE TO SOME CLICK LISTENER FOR LAUNCHING EDIT SCREEN
-        // assumes that you have an object named 'contact' for which you want to launch the edit screen.
-//            Uri lookupUri = ContactsContract.Contacts.getLookupUri(Long.parseLong(contact.getCONTACT_ID()), contact.getLOOKUP_KEY());
-//
-//            Intent editIntent = new Intent(Intent.ACTION_EDIT);
-//            editIntent.setDataAndType(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-//            editIntent.putExtra("finishActivityOnSaveCompleted", true);
-//
-//            ((Activity)getContext()).startActivityForResult(editIntent, 0);
+        protected void onRestart()
+        {
+            super.onRestart();
+            ContactManager temp = ContactManager.getInstance(this);
+            temp.refresh();
+            contact = temp.getContactDetails(cNum);
+            populateItems();
+        }
 
-    }
+     }
 
 

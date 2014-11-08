@@ -203,4 +203,8 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
     public void setGroupFilterId(int groupFilterId) {
         this.groupFilterId = groupFilterId;
     }
+
+    public void unselectAllItems(){
+        selectedItems.clear();
+    }
 }

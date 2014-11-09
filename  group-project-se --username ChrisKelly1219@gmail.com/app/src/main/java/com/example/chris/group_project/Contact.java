@@ -47,19 +47,19 @@ public class Contact
      */
     public boolean search(String term)
     {
-        if (displayName.toUpperCase().contains(term.toUpperCase()))
+        if (displayName != null && displayName.toUpperCase().contains(term.toUpperCase()))
         {
             return true;
         }
-        else if (firstName.toUpperCase().contains(term.toUpperCase()))
+        else if (displayName != null && firstName.toUpperCase().contains(term.toUpperCase()))
         {
              return true;
         }
-        else if(middleName.toUpperCase().contains(term.toUpperCase()))
+        else if(displayName != null && middleName.toUpperCase().contains(term.toUpperCase()))
         {
              return true;
         }
-        else if(lastName.toUpperCase().contains(term.toUpperCase()))
+        else if(displayName != null && lastName.toUpperCase().contains(term.toUpperCase()))
         {
             return true;
         }

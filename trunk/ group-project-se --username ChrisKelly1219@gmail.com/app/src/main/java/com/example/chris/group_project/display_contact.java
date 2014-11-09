@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
     public class display_contact  extends Activity
     {
+        Menu optionsMenu;
         ListView phoneListView;
         ListView emailListView;
         Contact contact;
@@ -266,7 +267,25 @@ import java.util.ArrayList;
         public boolean onCreateOptionsMenu(Menu menu) {
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.show_contact, menu);
+            this.optionsMenu = menu;
+            SetBlockMessage();
             return true;
+        }
+
+        private void SetBlockMessage()
+        {
+            if(contact != null && this.optionsMenu != null)
+            {
+                MenuItem BlockMessage = this.optionsMenu.findItem(R.id.action_block);
+                if(contact.getSendToVoicemail() == 0)
+                {
+                    BlockMessage.setTitle("Block Contact");
+                }
+                else if(contact.getSendToVoicemail() == 1)
+                {
+                    BlockMessage.setTitle("UnBlock Contact");
+                }
+            }
         }
 
         @Override
@@ -279,6 +298,17 @@ import java.util.ArrayList;
                 case R.id.action_delete:
                     ContactManager.getInstance(this).deleteContact(contact);
                     finish();
+                    return true;
+                case R.id.action_block:
+                    if(contact.getSendToVoicemail() == 0)
+                    {
+                        ContactManager.getInstance(this).blockContact(contact);
+                    }
+                    else
+                    {
+                        ContactManager.getInstance(this).unblockContact(contact);
+                    }
+                    this.SetBlockMessage();
                     return true;
                 default:
                     return true;

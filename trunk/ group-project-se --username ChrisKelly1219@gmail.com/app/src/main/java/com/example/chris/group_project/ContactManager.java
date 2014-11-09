@@ -90,7 +90,7 @@ public class ContactManager implements ModelChangeNotifier {
         return results;
     }
 
-    public void save(Contact c){} //writes new data to databoase
+    public void save(Contact c){} //writes new data to database
     public void commit(){}//perhaps is unecessary, allows you to have access to chnages locally right away, this will walk to the android database
 
 
@@ -380,4 +380,21 @@ public class ContactManager implements ModelChangeNotifier {
         refresh();
     }
 
+    /**
+     * Setting a contact to be automatically sent to voicemail
+     * @param contact The contact which will have its send to voicemail property changed
+     */
+    public void blockContact(Contact contact)
+    {
+        contact.setSendToVoicemail(1);
+    }
+
+    /**
+     * Setting a contact to no longer be automatically sent to voicemail
+     * @param contact The contact which will have its send to voicemail property changed
+     */
+    public void unblockContact(Contact contact)
+    {
+        contact.setSendToVoicemail(0);
+    }
 }

@@ -5,4 +5,9 @@
         android:icon="@drawable/ic_action_new"
         android:title="Delete"
         android:showAsAction="never" />
+
+    <item android:id="@+id/action_block"
+        android:icon="@drawable/ic_action_new"
+        android:title="Block/Unblock"
+        android:showAsAction="never" />
 </menu>

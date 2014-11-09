@@ -7,6 +7,9 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by nahuecht on 10/20/2014.
@@ -80,6 +83,23 @@ public class ContactManager implements ModelChangeNotifier {
     public ArrayList<Contact> search(String term)
     {
         ArrayList<Contact> results = new ArrayList<Contact>();
+
+        /*Sorting the ArrayList by contact display name as that is what is searched
+        first. That makes the search O(N lg N) as the sort takes the most time and the lookup
+        is linear after that. Contact.search is a constant time compare to check of the 3 different
+        names associated with contact so sorting them means that the lower alphabetic
+        contacts will be hit rather quickly and the later contacts will be hit in O(n lg n)
+        at the worst which is much better than n^3.
+         */
+        Collections.sort(results, new Comparator<Contact>()
+        {
+        @Override
+                public int compare(Contact c1, Contact c2)
+                {
+                    return c1.getDisplayName().compareToIgnoreCase(c2.getDisplayName());
+                }
+        });
+
         for(Contact temp : contacts)
         {
             if(temp.search(term))

@@ -47,34 +47,23 @@ public class Contact
      */
     public boolean search(String term)
     {
-        if (displayName.equalsIgnoreCase(term)){
+        if (displayName.toUpperCase().contains(term.toUpperCase()))
+        {
             return true;
         }
-        //TODO: Check for nulls. Make search smarter. Load contact details first?
-//        else if (firstName.equalsIgnoreCase(term))
-//        {
-//            return true;
-//        }
-//        else if(middleName.equalsIgnoreCase(term))
-//        {
-//            return true;
-//        }
-//        else if(lastName.equalsIgnoreCase(term))
-//        {
-//            return true;
-//        }
-//        else if(phoneNumbers.contains(term))
-//        {
-//            return true;
-//        }
-//        else if(emailAddresses.contains(term))
-//        {
-//            return true;
-//        }
-//        else if(groups.contains(Integer.parseInt(term)))
-//        {
-//            return true;
-//        }
+        else if (firstName.toUpperCase().contains(term.toUpperCase()))
+        {
+             return true;
+        }
+        else if(middleName.toUpperCase().contains(term.toUpperCase()))
+        {
+             return true;
+        }
+        else if(lastName.toUpperCase().contains(term.toUpperCase()))
+        {
+            return true;
+        }
+
         return false;
     }
     public Integer getId(){return id;}
@@ -192,4 +181,5 @@ public class Contact
     {
         return ContactsContract.Contacts.getLookupUri(Long.parseLong(getCONTACT_ID()), getLOOKUP_KEY());
     }
+
 }

@@ -51,15 +51,15 @@ public class Contact
         {
             return true;
         }
-        else if (displayName != null && firstName.toUpperCase().contains(term.toUpperCase()))
+        else if (firstName != null && firstName.toUpperCase().contains(term.toUpperCase()))
         {
              return true;
         }
-        else if(displayName != null && middleName.toUpperCase().contains(term.toUpperCase()))
+        else if(middleName != null && middleName.toUpperCase().contains(term.toUpperCase()))
         {
              return true;
         }
-        else if(displayName != null && lastName.toUpperCase().contains(term.toUpperCase()))
+        else if(lastName != null && lastName.toUpperCase().contains(term.toUpperCase()))
         {
             return true;
         }

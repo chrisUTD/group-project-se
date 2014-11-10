@@ -35,6 +35,14 @@ public class ContactPickerActivity extends Activity {
         else {
             contactManager.refresh();
         }
+        String title = getIntent().getStringExtra("title");
+        if (title != null){
+            setTitle(title);
+        }
+        String done_button_text = getIntent().getStringExtra("done_button_text");
+        if (done_button_text != null){
+            ((Button)findViewById(R.id.button_done)).setText(done_button_text);
+        }
 
         adapter = new ContactListAdapter(this,
                 R.layout.contact_list_item_view,

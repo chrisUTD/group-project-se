@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -102,6 +101,7 @@ public class ContactManager implements ModelChangeNotifier {
 
         for(Contact temp : contacts)
         {
+            getContactDetails(temp);
             if(temp.search(term))
             {
                 results.add(temp);

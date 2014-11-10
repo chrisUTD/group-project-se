@@ -22,6 +22,7 @@ public class GroupActivity extends Activity {
     private GroupManager groupManager;
 
     static final int PICK_CONTACT_REQUEST = 1;
+    static final int PICK_CONTACT_FOR_REMOVAL_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class GroupActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        ContactManager.getInstance(this).filterByGroup(groupId, groupManager);
     }
 
     @Override
@@ -71,13 +72,22 @@ public class GroupActivity extends Activity {
         int id = item.getItemId();
         if (id == R.id.action_add) {
             Intent pickerIntent = new Intent(this, ContactPickerActivity.class);
+            pickerIntent.putExtra("title", "Add Contacts...");
+            pickerIntent.putExtra("done_button_text", "Add");
             startActivityForResult(pickerIntent, PICK_CONTACT_REQUEST);
-
             return true;
         }
         else if (id == R.id.action_delete_group) {
             groupManager.delete(groupManager.get(groupId));
             finish();
+        }
+        else if (id == R.id.action_remove_contact){
+            Intent pickerIntent = new Intent(this, ContactPickerActivity.class);
+            pickerIntent.putExtra("groupId", groupId);
+            pickerIntent.putExtra("title", "Remove Contacts...");
+            pickerIntent.putExtra("done_button_text", "Remove");
+            startActivityForResult(pickerIntent, PICK_CONTACT_FOR_REMOVAL_REQUEST);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -113,6 +123,21 @@ public class GroupActivity extends Activity {
                     }
                 }
                 groupManager.addContactsToGroup(contactsToAddToGroup, groupManager.get(groupId));
+            }
+        }
+        else if(requestCode == PICK_CONTACT_FOR_REMOVAL_REQUEST){
+            if (resultCode == RESULT_OK){
+                ArrayList<Integer> indices = data.getIntegerArrayListExtra("contacts");
+                ArrayList<Contact> contactsToRemoveFromGroup = new ArrayList<Contact>();
+                for (Integer i : indices){
+                    ContactManager contactManger = ContactManager.getInstance(this);
+                    ArrayList<String> CONTACT_IDs = groupManager.get(groupId).getCONTACT_IDs();
+
+                    Contact c = contactManger.getContactByCONTACT_ID(CONTACT_IDs.get(i));
+                    Log.d("GROUP ACTIVITY", "removing " + "id: " + c.getId() + " " + c.getCONTACT_ID() + " " + c.getDisplayName());
+                    contactsToRemoveFromGroup.add(c);
+                }
+                groupManager.removeContactsFromGroup(contactsToRemoveFromGroup, groupManager.get(groupId));
             }
         }
         ContactManager.getInstance(this).filterByGroup(groupId, groupManager);

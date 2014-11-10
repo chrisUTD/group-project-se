@@ -3,10 +3,12 @@ package com.example.chris.group_project;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -60,10 +62,13 @@ public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnCli
 
         Group group = manager.getGroups().get(position);
         if (group != null){
-            Bitmap bitmap = null;
+            Bitmap bitmap =  BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.group_person_icon);
 
             ((TextView)view.findViewById(R.id.contact_list_item_text)).setText(
                      group.getName());
+
+            ((ImageView)view.findViewById(R.id.contact_list_item_image)).setImageBitmap(bitmap);
 
             view.setTag(group);
             view.setOnClickListener(this);

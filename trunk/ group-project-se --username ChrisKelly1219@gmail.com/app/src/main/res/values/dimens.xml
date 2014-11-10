@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="phoneNumberSize">30dp</dimen>
     <dimen name="displaycontactname_size">50dp</dimen>
+    <dimen name="edit_button_text_size">30dp</dimen>
+    <dimen name="contact_buttons_size">20dp</dimen>
 </resources>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -175,7 +176,17 @@ public class GroupManager implements ModelChangeNotifier {
     public void delete(Group group){
         if (groups.contains(group)
                 && group.getId() != -1){
+
+            // Dissallow deletion of Blacklist group since this group provides additional functionality
+            if (group.getName().compareTo(GroupContract.Group.VALUE_BLACKLIST) == 0){
+                return;
+            }
+
             groups.remove(groups.indexOf(group));
+
+            for (String CONTACT_ID : group.getCONTACT_IDs()){
+                removeContactIdForGroup(CONTACT_ID, group);
+            }
 
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -200,6 +211,21 @@ public class GroupManager implements ModelChangeNotifier {
                 Contact contactToAdd = ContactManager.getInstance(context).getContactByCONTACT_ID(contactIdToAdd);
                 if (!contactIsInGroup(contactToAdd, group)) {
                     insertContactIdForGroup(contactIdToAdd, group); // ADD TO DATABASE
+                    getGroupDetails(group); // refreshes the data
+                }
+            }
+        }
+        notifyListeners(this);
+    }
+
+    public void removeContactsFromGroup(ArrayList<Contact> contactsToRemove, Group group){
+        getGroupDetails(group);
+        for (Contact contact : contactsToRemove) {
+            String contactIdToRemove = contact.getCONTACT_ID();
+            if (contactIdToRemove != null) {
+                Contact contactToRemove = ContactManager.getInstance(context).getContactByCONTACT_ID(contactIdToRemove);
+                if (contactIsInGroup(contactToRemove, group)) {
+                    removeContactIdForGroup(contactIdToRemove, group); // ADD TO DATABASE
                     getGroupDetails(group); // refreshes the data
                 }
             }
@@ -241,18 +267,27 @@ public class GroupManager implements ModelChangeNotifier {
                 && CONTACT_ID != null){
             SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-//            ContentValues values = new ContentValues();
-//            values.put(GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID, CONTACT_ID);
-//            values.put(GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID, group.getId());
-//
-//            db.insert(GroupContract.ContactToGroup.TABLE_NAME,
-//                    null,
-//                    values);
-
             db.execSQL("INSERT INTO " + GroupContract.ContactToGroup.TABLE_NAME + "" +
                     "("+GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID+", " +
                     GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID+")" +
                     " VALUES('"+ CONTACT_ID +"', " + group.getId() + " );");
+        }
+
+        if (group.getName().toUpperCase() == "BLACKLIST"){
+            // TODO: something special to make the contact blacklisted, if possible.
+        }
+    }
+
+    private void removeContactIdForGroup(String CONTACT_ID, Group group){
+        if (group.getId() != -1
+                && CONTACT_ID != null){
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+            Log.d("GROUP MANAGER", "removing form group contact: " + CONTACT_ID);
+
+            db.execSQL("DELETE FROM " + GroupContract.ContactToGroup.TABLE_NAME + " " +
+                    "WHERE " + GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID + " LIKE " + " '" + CONTACT_ID + "' " +
+                    "AND " + GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID + " = " + group.getId());
         }
 
         if (group.getName().toUpperCase() == "BLACKLIST"){

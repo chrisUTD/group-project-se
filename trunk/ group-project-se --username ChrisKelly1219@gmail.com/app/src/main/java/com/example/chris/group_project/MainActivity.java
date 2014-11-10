@@ -49,10 +49,9 @@ public class MainActivity extends Activity {
         tabNames = new HashMap<Integer, String>();
         tabNames.put(0, "Contacts");
         tabNames.put(1, "Groups");
-        tabNames.put(2, "Favorites");
     }
 
-    private static int TAB_COUNT = 3;
+    private static int TAB_COUNT = 2;
     private static String TAB_NAME = "tab_name";
     private static Integer currentTabIndex = 0;
 
@@ -90,11 +89,9 @@ public class MainActivity extends Activity {
 
         ((TextView)findViewById(R.id.tab_button_label_0)).setText("Contacts");
         ((TextView)findViewById(R.id.tab_button_label_1)).setText("Groups");
-        ((TextView)findViewById(R.id.tab_button_label_2)).setText("Favorites");
 
         View tab0 = findViewById(R.id.tab_0);
         View tab1 = findViewById(R.id.tab_1);
-        View tab2 = findViewById(R.id.tab_2);
 
         currentTabView = tab0;
 
@@ -108,12 +105,6 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 tabButtonClicked(1);
-            }
-        });
-        tab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tabButtonClicked(2);
             }
         });
 
@@ -289,10 +280,6 @@ public class MainActivity extends Activity {
                 case 1:
                     fragment = GroupFragment.newInstance(position);
                     break;
-                case 2:
-                    //TODO: Replace this with another tab item:
-                    fragment = ContactsFragment.newInstance(position);
-                    break;
                 default:
                     fragment = ContactsFragment.newInstance(position);
                     break;
@@ -314,8 +301,6 @@ public class MainActivity extends Activity {
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
         }

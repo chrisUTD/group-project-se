@@ -63,6 +63,10 @@ public class Contact
         {
             return true;
         }
+        else if(lastName != null && lastName.toUpperCase().contains(term.toUpperCase()))
+        {
+            return true;
+        }
 
         return false;
     }

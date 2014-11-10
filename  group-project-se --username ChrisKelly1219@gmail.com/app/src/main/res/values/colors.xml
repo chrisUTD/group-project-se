@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item type="color" name="tab_bar_button_selected_background">#ffb1ceff</item>
-    <item type="color" name="tab_bar_button_background">#ffd6dadd</item>
-    <item type="color" name="dark_gray">#ff3e4041</item>
+    <item type="color" name="tab_bar_button_selected_background">#4EBBF2</item>
+    <item type="color" name="tab_bar_button_background">#ffe2e5e5</item>
+    <item type="color" name="dark_gray">#ff3761d6</item>
     <item type="color" name="activity_background">#fff2efef</item>
     <item type="color" name="contact_list_background">#fff2efef</item>
-    <item type="color" name="contact_list_selected_background">#ff577fd1</item>
+    <item type="color" name="contact_list_selected_background">#4EBBF2</item>
+    <item type="color" name="action_bar_background">#ff0a83c3</item>
 
 </resources>

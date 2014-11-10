@@ -3,6 +3,7 @@ package com.example.chris.group_project;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,7 +104,8 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
 
         Contact contact = manager.contacts().get(position);
         if (contact != null){
-            Bitmap bitmap = null;
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.person_icon);
 
             if (contact.getPhotoUri() != null) {
                 bitmap = Utilities.getBitmapFromUri(getContext(), Uri.parse(contact.getPhotoUri()));

@@ -94,6 +94,9 @@ public class MainActivity extends Activity {
         View tab1 = findViewById(R.id.tab_1);
 
         currentTabView = tab0;
+        findViewById(R.id.tab_button_indicator_0).setBackgroundColor(getResources().getColor(R.color.tab_bar_button_selected_background));
+        findViewById(R.id.tab_button_indicator_1).setBackgroundColor(getResources().getColor(R.color.tab_bar_button_background));
+
 
         tab0.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,7 +258,24 @@ public class MainActivity extends Activity {
     }
 
     private void tabChanged(Integer index){
+
         setTitle(tabNames.get(index));
+        currentTabIndex = index;
+        Log.d("MAIN ACTIVITY", "tab changed index: " + index);
+
+        switch(index){
+            case 0:
+                findViewById(R.id.tab_button_indicator_0).setBackgroundColor(getResources().getColor(R.color.tab_bar_button_selected_background));
+                findViewById(R.id.tab_button_indicator_1).setBackgroundColor(getResources().getColor(R.color.tab_bar_button_background));
+                break;
+            case 1:
+                findViewById(R.id.tab_button_indicator_0).setBackgroundColor(getResources().getColor(R.color.tab_bar_button_background));
+                findViewById(R.id.tab_button_indicator_1).setBackgroundColor(getResources().getColor(R.color.tab_bar_button_selected_background));
+                break;
+            default:
+                findViewById(R.id.tab_button_indicator_0).setBackgroundColor(getResources().getColor(R.color.tab_bar_button_background));
+                findViewById(R.id.tab_button_indicator_1).setBackgroundColor(getResources().getColor(R.color.tab_bar_button_background));
+        }
     }
 
     /**

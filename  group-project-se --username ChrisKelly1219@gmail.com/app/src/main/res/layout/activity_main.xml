@@ -33,30 +33,43 @@
             >
 
             <View
+                android:id="@+id/line"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignParentTop="true"
+                android:background="@color/tab_bar_button_selected_background"
+                />
+
+            <View
                 android:id="@+id/tab_button_indicator_0"
                 android:layout_width="wrap_content"
                 android:layout_height="5dp"
-                android:layout_alignParentTop="true"
-                android:visibility="invisible"
+                android:layout_below="@+id/line"
                 android:background="@color/tab_bar_button_selected_background"
-
+                android:layout_marginBottom="2dp"
                 />
 
-            <ImageView
-                android:id="@+id/tab_button_image_0"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tab_button_indicator_0"
-                android:layout_centerHorizontal="true"/>
+
 
             <TextView
                 android:id="@+id/tab_button_label_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/tab_button_image_0"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:paddingTop="1dp"
+                />
+
+            <ImageView
+                android:id="@+id/tab_button_image_0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tab_button_indicator_0"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/contact_icon"
+                android:layout_above="@id/tab_button_label_0"
+                />
         </RelativeLayout>
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -66,30 +79,41 @@
             android:layout_weight="1">
 
             <View
+                android:id="@+id/line1"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignParentTop="true"
+                android:background="@color/tab_bar_button_selected_background"
+                />
+
+            <View
                 android:id="@+id/tab_button_indicator_1"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:layout_alignParentTop="true"
-                android:visibility="invisible"
+                android:layout_below="@id/line1"
                 android:background="@color/tab_bar_button_selected_background"
-
+                android:layout_marginBottom="2dp"
                 />
 
-            <ImageView
-                android:id="@+id/tab_button_image_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tab_button_indicator_1"
-                android:layout_centerHorizontal="true"/>
+
 
             <TextView
                 android:id="@+id/tab_button_label_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/tab_button_image_1"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="1dp"
                 android:textAlignment="center"/>
+
+            <ImageView
+                android:id="@+id/tab_button_image_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tab_button_indicator_1"
+                android:layout_above="@id/tab_button_label_1"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/group_icon"/>
         </RelativeLayout>
 
         </LinearLayout>

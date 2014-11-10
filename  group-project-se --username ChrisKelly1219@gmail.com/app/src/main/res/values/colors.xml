@@ -9,4 +9,6 @@
     <item type="color" name="contact_list_selected_background">#4EBBF2</item>
     <item type="color" name="action_bar_background">#ff0a83c3</item>
 
+    <color name="contact_view_button_color">#ff0a83c3</color>
+    <color name="contact_view_button_text_color">#ffffffff</color>
 </resources>

@@ -48,13 +48,10 @@ import java.util.ArrayList;
             setContact();
             setContentView(R.layout.show_contact);
             populateItems();
-
         }
 
         private void setContact()
         {
-
-
             // Retrieve the contact id passed through the intent when this activity is launched
             // the retrieve contact and set it as this.contact
             Intent intent = getIntent();
@@ -78,10 +75,10 @@ import java.util.ArrayList;
         private void populateItems()
         {
             createNameView();
-            createImageView();
+            if(contact.getPhotoUri() != null)createImageView();
             createEditButton();
-            CreatePhoneListView();
-            CreateEmailListView();
+            if(contact.getPhoneNumbers() != null){CreatePhoneListView();}
+            if(contact.getEmailAddresses() != null)CreateEmailListView();
             populateContactGroupView();
         }
 
@@ -137,8 +134,8 @@ import java.util.ArrayList;
 
        private void populateContactGroupView()
        {
-          // LinearLayout temp = (LinearLayout) findViewById(R.id.display_groups);
-           //ArrayList<Button> groups = createGroupBtns();
+           LinearLayout temp = (LinearLayout) findViewById(R.id.display_groups);
+          // ArrayList<Button> groups = createGroupBtns();
            //addGroupButtonsToView(temp,groups);
        }
 
@@ -146,14 +143,22 @@ import java.util.ArrayList;
         {
             ArrayList<Button> groupBs = new ArrayList<Button>();
             GroupManager manager = GroupManager.getInstance(this);
-            ArrayList<Group> groupHolder = manager.getGroupsForContact(contact);
+            ArrayList<Group> groupHolder = manager.getGroups();
+            ArrayList<Integer> integerHolder = contact.getGroups();
 
-            for(int i=0;i<groupHolder.size();i++)
+            for(int i=0;i<integerHolder.size();i++)
             {
-                Button btn = new Button(this);
-                btn.setText(groupHolder.get(i).getName());
-                groupBs.add(btn);
+                for(int j=0;i<groupHolder.size();j++)
+                {
+                    if (groupHolder.get(j).getId() == integerHolder.get(i))
+                    {
+                        Button btn = new Button(this);
+                        btn.setText(groupHolder.get(i).getName());
+                        groupBs.add(btn);
+                    }
+                }
             }
+
 
             return groupBs;
         }
@@ -193,6 +198,7 @@ import java.util.ArrayList;
                 Button textButton = (Button) view.findViewById(R.id.listTextContactButton);
                 ArrayList<String> tempNum = contact.getPhoneNumbers();
                 final String phoneNumber = tempNum.get(position);
+
                 number.setText(phoneNumber);
 
                 callButton.setOnClickListener( new View.OnClickListener()

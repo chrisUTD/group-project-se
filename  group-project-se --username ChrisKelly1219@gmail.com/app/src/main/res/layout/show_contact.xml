@@ -1,86 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1"
-    android:id="@+id/show_contact">
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView8">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/namePictureLayout"
-        android:weightSum="1">
+        android:layout_height="fill_parent">
 
-        <ImageView
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:id="@+id/sc_Image"
-            android:layout_marginTop="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Name"
-            android:id="@+id/sc_Name"
-            android:layout_marginTop="45dp"
-            android:layout_weight="0.86"
-            android:layout_gravity="top" />
-
-        <Button
-            android:layout_width="99dp"
-            android:layout_height="73dp"
-            android:text="Edit"
-            android:id="@+id/edit_contact_button" />
-
-    </LinearLayout>
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/phone_number_listView"
-        android:layout_gravity="center_horizontal" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="E-Mail"
-        android:id="@+id/emailString"
-        android:layout_marginTop="5dp" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="88dp"
-        android:id="@+id/email_list_view"
-        android:layout_weight="0.24" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Groups"
-            android:id="@+id/groups_string" />
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/horizontalScrollView" >
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="630dp"
+            android:weightSum="1"
+            android:id="@+id/linearLayout22" >
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/display_groups"></LinearLayout>
-        </HorizontalScrollView>
-    </LinearLayout>
+                android:layout_height="wrap_content"
+                android:id="@+id/namePictureLayout"
+                android:weightSum="1"
+                android:layout_marginTop="5dp" >
 
-</LinearLayout>
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:id="@+id/sc_Image"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Name"
+                    android:id="@+id/sc_Name"
+                    android:layout_marginTop="45dp"
+                    android:layout_weight="0.86"
+                    android:layout_gravity="top"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="99dp"
+                    android:layout_height="73dp"
+                    android:text="Edit"
+                    android:id="@+id/edit_contact_button"
+                    android:background="#ff0a83c3"
+                    android:textColor="@color/contact_view_button_text_color"
+                    android:textSize="@dimen/edit_button_text_size"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Phone Numbers"
+                android:id="@+id/textView"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#ff000000">
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/phone_number_listView"
+                    android:layout_marginTop="5dp"
+                    android:divider="#ff000000"
+                    android:dividerHeight="1dp"
+                    android:drawSelectorOnTop="false"
+                    android:background="#ffffffff" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-Mail"
+                android:id="@+id/emailString"
+                android:layout_marginTop="2dp"
+                android:textStyle="bold"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#ff000000"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="1dp">
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/email_list_view"
+                    android:divider="#ff000000"
+                    android:dividerHeight="1dp"
+                    android:background="#ffffffff"
+                    android:layout_marginTop="1dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/horizontalScrollView" >
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/display_groups" />
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Groups"
+                android:id="@+id/groups_string"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -15,11 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jonny on 10/27/14.
+ * Adatpter to provide cell views for Groups list view.
  */
 public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnClickListener, ModelChangeListener {
-
+    /**
+     * Reference to the group manager that provides the data to display.
+     */
     private GroupManager manager;
+    /** reference to current context **/
     private Context context;
 
     /************************** MODEL CHANGE LISTENER IMPLEMENTATION ******************************/
@@ -37,15 +40,31 @@ public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnCli
         }
     }
     /**********************************************************************************************/
-
+    /**
+     * Basic constructor
+     * @param context current context.
+     * @param textViewResourceId layout for the cell view.
+     */
     private GroupsListAdapter(Context context, int textViewResourceId){
         super(context, textViewResourceId);
     }
 
+    /**
+     * Constructor with groups list.
+     * @param context current context.
+     * @param resource layout for the cell view.
+     * @param groups list of groups to display.
+     */
     private GroupsListAdapter(Context context, int resource, List<Group> groups){
         super(context, resource, groups);
     }
 
+    /**
+     * Constuctor with group manager.
+     * @param context current context.
+     * @param resource layout for the cell view.
+     * @param manager group manager containing the groups to display.
+     */
     public GroupsListAdapter(Context context, int resource, GroupManager manager){
         this(context, resource, manager.getGroups());
         this.manager = manager;
@@ -54,6 +73,13 @@ public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnCli
         manager.registerListener(this);
     }
 
+    /**
+     * Method to create and return the cell views for the list view.
+     * @param position
+     * @param view
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View view, ViewGroup parent){
         if (view == null){
@@ -76,11 +102,19 @@ public class GroupsListAdapter extends ArrayAdapter<Group> implements View.OnCli
         return view;
     }
 
+    /**
+     * Get count of cells in the list view.
+     * @return
+     */
     @Override
     public int getCount() {
         return manager.getGroups().size();
     }
 
+    /**
+     * Handle click events on the list item views. Launches the GroupActivity for the clicked group.
+     * @param view
+     */
     @Override
     public void onClick(View view){
 

@@ -11,15 +11,39 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * Created by nahuecht on 10/20/2014.
+ * Class that loads information from Android ContactProvider and creates Contact objects to hold the
+ * data. The class provides methods for laoding, rereshing, filtering and unfiltering the list for
+ * searching and by group. Filtering by group depends upon GroupManager object.
+ *
+ * This class provides access to a singleton object in order to preserve the lifetime of the object
+ * across activity creation and destruction.
+ *
+ * The manager can register listeners for notification of changes to the contacts stored in the database
  */
 public class ContactManager implements ModelChangeNotifier {
+    /**
+     * ArrayList that hold references to all contacts loaded from the Android ContactProvider.
+     * Public access is not provided to this list.
+     */
     private ArrayList<Contact> contacts;
+    /**
+     * This ArrayList holds all or a subset of the contacts stored in the ContactManager. This list
+     * is filtered based on search terms or by group.
+     * Public access is provided to this list only.
+     */
     private ArrayList<Contact> filteredContacts;
+    /**
+     * The static instance of the class that holds data.
+     */
     private static ContactManager instance;
+    /**
+     * Reference to the current context.
+     */
     private static Context context;
+    /**
+     * Number of items stored in the manager.
+     */
     private static Integer count;
-    private boolean filtered = false;
 
     /*************************** MODEL CHANGE NOTIFIER IMPLEMENTATION *****************************/
     private static ArrayList<ModelChangeListener> listeners = new ArrayList<ModelChangeListener>();
@@ -52,9 +76,10 @@ public class ContactManager implements ModelChangeNotifier {
     }
     /**********************************************************************************************/
 
-    /* I think this is the right idea here but im not really sure.
-     * Also this is an n^2 search because arraylist is already slow and
-     * im doing another linear search, perhaps use a min heap instead?
+    /**
+     * Retrieve a contact by identifying the id given by the ContactManager upon initial creation.
+     * @param id contact's id
+     * @return the contact
      */
     public Contact get(int id)
     {
@@ -110,10 +135,6 @@ public class ContactManager implements ModelChangeNotifier {
         return results;
     }
 
-    public void save(Contact c){} //writes new data to database
-    public void commit(){}//perhaps is unecessary, allows you to have access to chnages locally right away, this will walk to the android database
-
-
     /**
      * Private constructor - called by getInstance when instance had not already been created.
      * Calls load() to load contacts into the ContactManager object.
@@ -164,9 +185,6 @@ public class ContactManager implements ModelChangeNotifier {
      * To Load other attributes into a contact object, you must call ContactManager.getContactDetails(id)
      */
     private void load(){
-
-        //Log.d("ContactManager", "load()");
-
         Cursor contactCursor = context.getContentResolver().query(
                 ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts.DISPLAY_NAME + " COLLATE NOCASE ASC");
         if (contactCursor.getCount() > 0){
@@ -175,8 +193,6 @@ public class ContactManager implements ModelChangeNotifier {
                 Contact contact = new Contact();
                 count++;
                 contact.setId(count - 1);
-
-                //Log.d("JRContactManager", "new contact id: " + contact.getId());
 
                 //get contact id:
                 String contactId = contactCursor.getString(
@@ -218,8 +234,6 @@ public class ContactManager implements ModelChangeNotifier {
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone
                                         .PHOTO_URI)));
 
-                //Log.d("JRContactManager", "new contact name " + contact.getDisplayName());
-
                 // Add loaded Contact to the array
                 contact.setContainsNewData(false);
                 contact.setContainsDetails(false);
@@ -251,16 +265,10 @@ public class ContactManager implements ModelChangeNotifier {
     }
 
     /**
-     * MAY NOT NEED THIS
+     * Load the additional details for the specified contact.
+     * @param contactWithoutDetails
+     * @return contact with details loaded.
      */
-//    public void commit(){
-//        for (JRContact contact : contacts){
-//            if (contact.containsNewData()){
-//
-//            }
-//        }
-//    }
-
     public Contact getContactDetails(Contact contactWithoutDetails){
         return getContactDetails(contactWithoutDetails.getId());
     }
@@ -334,10 +342,6 @@ public class ContactManager implements ModelChangeNotifier {
             emailCursor.close();
             contact.setContainsDetails(true);
         }
-
-        // Get and put Groups
-        //TODO: LOAD GROUPS INTO THE groups ARRAY
-
         return contact;
     }
 
@@ -359,6 +363,11 @@ public class ContactManager implements ModelChangeNotifier {
         return foundContact;
     }
 
+    /**
+     * Filter the publicly accessible array of contacts by search term.
+     * @param term basis of filtering
+     * @return filtered contacts.
+     */
     public ArrayList<Contact> filterBySearchTerm(String term){
         filteredContacts.clear();
         for (Contact c : contacts){
@@ -370,6 +379,12 @@ public class ContactManager implements ModelChangeNotifier {
         return filteredContacts;
     }
 
+    /**
+     * Filter the publicly accessible array of contacts by group.
+     * @param groupId GroupManager id of the group's contacts to show.
+     * @param groupManager GroupManager instance that provides access to groups data.
+     * @return fitlered list.
+     */
     public ArrayList<Contact> filterByGroup(long groupId, GroupManager groupManager){
         filteredContacts.clear();
 
@@ -387,12 +402,21 @@ public class ContactManager implements ModelChangeNotifier {
         return filteredContacts;
     }
 
+    /**
+     * Unfilters the publicly accessible array of contacts.
+     * @return (un)filtered array
+     */
     public ArrayList<Contact> unfilter(){
         filteredContacts = contacts;
         notifyListeners(this);
         return filteredContacts;
     }
 
+    /**
+     * Delete contact from the ContactProvider.
+     * After deletion the ContactManager is refreshed from the android ContactProvider.
+     * @param contact
+     */
     public void deleteContact(Contact contact)
     {
         ContentResolver cr = context.getContentResolver();
@@ -400,6 +424,7 @@ public class ContactManager implements ModelChangeNotifier {
         refresh();
     }
 
+    // TODO: UPDATE THESE METHODS TO SAVE UPDATED INFO TO THE ANDROID CONTACTPROVIDER
     /**
      * Setting a contact to be automatically sent to voicemail
      * @param contact The contact which will have its send to voicemail property changed

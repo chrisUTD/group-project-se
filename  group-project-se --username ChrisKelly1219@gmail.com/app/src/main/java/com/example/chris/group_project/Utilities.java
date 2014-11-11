@@ -8,7 +8,7 @@ import android.net.Uri;
 import java.io.InputStream;
 
 /**
- * Created by Jonny on 10/27/14.
+ * Any convenience methods for this project.
  */
 public class Utilities {
     /**

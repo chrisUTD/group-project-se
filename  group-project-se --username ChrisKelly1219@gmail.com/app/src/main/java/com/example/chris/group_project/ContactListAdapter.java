@@ -16,7 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jonny on 10/27/14.
+ * List Adapter subclass that handles the listing of contacts contained in a ContactManager object.
+ * This class supports two modes identified with the enumeration SHOW_DETAILS_ON_CLICK and
+ * SELECT_ON_CLICK. The former launches the display_contact activity on click for the clicked
+ * contact. The latter selects the row and adds it's index to the selectedItems array. This mode
+ * allows the list view that the adapter backs to acts as a Contact Picker. Default mode is
+ * SHOW_DETAILS_ON_CLICK
  */
 public class ContactListAdapter extends ArrayAdapter<Contact> implements View.OnClickListener, ModelChangeListener {
 
@@ -30,20 +35,26 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         SELECT_ON_CLICK
     }
 
-    public enum ContactListFilter {
-        NONE,
-        GROUP,
-        STARRED
-    }
-
+    /**
+     * Reference to the ContactManager object that acts as the adapter's data source.
+     */
     private ContactManager manager;
+    /**
+     * Reference to the activity containing the list view associated with the adapter.
+     */
     private Context context;
+    /**
+     * Enumeration SHOW_DETAILS_ON_CLICK and SELECT_ON_CLICK specifying the mode that the list view
+     * is in.
+     * The former launches the display_contact activity on click for the clicked contact. The latter
+     * selects the row and adds it's index to the selectedItems array. This mode allows the list view
+     * that the adapter backs to acts as a Contact Picker.
+     */
     private ContactListMode mode = ContactListMode.SHOW_DETAILS_ON_CLICK;
+    /**
+     * Array that hold indices of selected rows when the adapter is in picker mode.
+     */
     private static ArrayList<Integer> selectedItems;
-
-    private ContactListFilter filter = ContactListFilter.NONE;
-    private int groupFilterId = -1;
-
 
     /************************** MODEL CHANGE LISTENER IMPLEMENTATION ******************************/
     private ArrayList<ModelChangeNotifier> notifiers = new ArrayList<ModelChangeNotifier>();
@@ -61,14 +72,32 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
     }
     /**********************************************************************************************/
 
+    /**
+     * Standard constructor.
+     * @param context current context
+     * @param textViewResourceId layout for cell views
+     */
     private ContactListAdapter(Context context, int textViewResourceId){
         super(context, textViewResourceId);
     }
 
+    /**
+     * Constructor with list of contacts to display.
+     * @param context current context
+     * @param resource layout for cell views
+     * @param contacts list of contact model objects
+     */
     private ContactListAdapter(Context context, int resource, List<Contact> contacts){
         super(context, resource, contacts);
     }
 
+    /**
+     * Constructor with ContactManager.
+     * @param context current context
+     * @param resource layout for cell views
+     * @param manager ContactManager object that provides a reference to the list of contacts to be
+     *                displayed in the list view.
+     */
     public ContactListAdapter(Context context, int resource, ContactManager manager){
         this(context, resource, manager.contacts());
         this.manager = manager;
@@ -80,15 +109,18 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         manager.registerListener(this);
     }
 
+    /**
+     * Constructor with ContactManager and ContactListMode
+     * @param context current context
+     * @param resource layout for cell views
+     * @param manager ContactManager object that provides a reference to the list of contacts to be
+     *                displayed in the list view.
+     * @param mode ConctactListMode to determine whether the adapter should treat its list view as a
+     *             contact detail view launcher or a picker view.
+     */
     public ContactListAdapter(Context context, int resource, ContactManager manager, ContactListMode mode){
         this(context, resource, manager);
         setMode(mode);
-    }
-
-    public ContactListAdapter(Context context, int resource, ContactManager manager, ContactListMode mode, ContactListFilter filter){
-        this(context, resource, manager);
-        setMode(mode);
-        setContactListFilter(filter);
     }
 
     @Override
@@ -167,6 +199,11 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         }
     }
 
+    /**
+     * Set the mode of the adapter and it's list view -- whether in detail selection mode or picker
+     * mode.
+     * @param mode ConctactListMode enumeration.
+     */
     public void setMode(ContactListMode mode){
         this.mode = mode;
     }
@@ -178,34 +215,33 @@ public class ContactListAdapter extends ArrayAdapter<Contact> implements View.On
         return false;
     }
 
+    /**
+     * Adds the position to list of selected indices.
+     * @param position to add to list.
+     */
     private void selectItem(int position){
         selectedItems.add(position);
     }
 
+    /**
+     * Removes the position from the list of selected indices.
+     * @param position to remove from list.
+     */
     private void deselectItem(int position){
         selectedItems.remove(selectedItems.indexOf(position));
     }
 
+    /**
+     * Get selected indices.
+     * @return reference to list of indices.
+     */
     public ArrayList<Integer> getSelectedItems(){
         return selectedItems;
     }
 
-    public ContactListFilter getContactListFilter() {
-        return filter;
-    }
-
-    public void setContactListFilter(ContactListFilter filter) {
-        this.filter = filter;
-    }
-
-    public int getGroupFilterId() {
-        return groupFilterId;
-    }
-
-    public void setGroupFilterId(int groupFilterId) {
-        this.groupFilterId = groupFilterId;
-    }
-
+    /**
+     * Clears all selected row indices.
+     */
     public void unselectAllItems(){
         selectedItems.clear();
     }

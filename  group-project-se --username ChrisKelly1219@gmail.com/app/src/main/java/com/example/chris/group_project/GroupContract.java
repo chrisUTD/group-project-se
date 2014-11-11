@@ -25,7 +25,6 @@ public final class GroupContract {
         public static final String VALUE_FAMILY = "Family";
         public static final String VALUE_FRIENDS = "Friends";
         public static final String VALUE_WORK = "Work";
-        public static final String VALUE_BLACKLIST = "Blacklist";
     }
 
     /**
@@ -56,8 +55,7 @@ public final class GroupContract {
                     "VALUES ('"+ Group.VALUE_FAVORITES +"'), ('" +
                         Group.VALUE_FAMILY + "'), ('" +
                         Group.VALUE_FRIENDS + "'), ('"+
-                        Group.VALUE_WORK + "'), ('"+
-                        Group.VALUE_BLACKLIST + "')";
+                        Group.VALUE_WORK + "')";
 
     /**
      * SQL Command to delete Group table.

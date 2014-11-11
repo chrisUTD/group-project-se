@@ -12,17 +12,23 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-
+/**
+ * Activity that provides ability to select one or more contacts.
+ */
 public class ContactPickerActivity extends Activity {
-
+    /**
+     * Reference to ContactManager instance that provides the model objects to display.
+     */
     private ContactManager contactManager;
+    /**
+     * Adapter that provides the views for the list view.
+     */
     private ContactListAdapter adapter;
 
+    /** Create activity and set up list view and create buttons with listeners **/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d("CONTACT PICKER ACTIVITY", "on create");
 
         setContentView(R.layout.activity_contact_picker);
 
@@ -69,14 +75,14 @@ public class ContactPickerActivity extends Activity {
 
     }
 
-
+    /** Inflate the menu **/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.contact_picker, menu);
         return true;
     }
-
+    /** Menu selection event **/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -89,6 +95,10 @@ public class ContactPickerActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Respond to Done Button being clicked.
+     * Activity finishes and passes the array of selected items back through intent.
+     */
     public void doneButtonClicked(){
         ArrayList<Integer> selectedItemIndices = adapter.getSelectedItems();
 
@@ -103,6 +113,10 @@ public class ContactPickerActivity extends Activity {
         finish();
     }
 
+    /**
+     * Respond to Cancel button being clicked.
+     * Activity finishes without returning any results.
+     */
     public void cancelButtonClicked(){
         setResult(RESULT_CANCELED);
         adapter.unselectAllItems();

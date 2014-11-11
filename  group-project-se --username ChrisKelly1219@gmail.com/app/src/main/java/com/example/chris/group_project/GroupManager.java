@@ -10,13 +10,21 @@ import android.util.Log;
 import java.util.ArrayList;
 
 /**
- * Created by nahuecht on 10/20/2014.
+ * GroupManager class loads data from the Group database and creates group objects to store the data.
+ * It also handles adding and deleting contacts from a group, and adding and deleting groups.
+ *
+ * The manager can register listeners for notification of changes to the contacts stored in the database
  */
 public class GroupManager implements ModelChangeNotifier {
+    /** The groups stored in the manager **/
     private ArrayList<Group> groups;
+    /** GroupManager static instance. **/
     private static GroupManager instance;
+    /** Database Helper object to retreive the databse **/
     private GroupDbHelper dbHelper;
+    /** Group database reference **/
     private SQLiteDatabase database;
+    /** Reference to current context **/
     private Context context;
 
     /*************************** MODEL CHANGE NOTIFIER IMPLEMENTATION *****************************/
@@ -173,14 +181,13 @@ public class GroupManager implements ModelChangeNotifier {
         return group;
     }
 
+    /**
+     * Delete specified group from the database and the Manager.
+     * @param group group to delete
+     */
     public void delete(Group group){
         if (groups.contains(group)
                 && group.getId() != -1){
-
-            // Dissallow deletion of Blacklist group since this group provides additional functionality
-            if (group.getName().compareTo(GroupContract.Group.VALUE_BLACKLIST) == 0){
-                return;
-            }
 
             groups.remove(groups.indexOf(group));
 
@@ -203,6 +210,11 @@ public class GroupManager implements ModelChangeNotifier {
         notifyListeners(this);
     }
 
+    /**
+     * Add specified contacts to the group and update the database.
+     * @param contactsToAdd array of contacts to add to the group
+     * @param group group to add contact to.
+     */
     public void addContactsToGroup(ArrayList<Contact> contactsToAdd, Group group) {
         getGroupDetails(group);
         for (Contact contact : contactsToAdd) {
@@ -218,6 +230,11 @@ public class GroupManager implements ModelChangeNotifier {
         notifyListeners(this);
     }
 
+    /**
+     * Remove specified contacts from the group and update the database.
+     * @param contactsToRemove array of contacts to remove.
+     * @param group group to remove.
+     */
     public void removeContactsFromGroup(ArrayList<Contact> contactsToRemove, Group group){
         getGroupDetails(group);
         for (Contact contact : contactsToRemove) {
@@ -233,6 +250,12 @@ public class GroupManager implements ModelChangeNotifier {
         notifyListeners(this);
     }
 
+    /**
+     * Determine whether the specified contact belongs to the group specified by id.
+     * @param findContact contact to find.
+     * @param groupId group to check.
+     * @return true if in group false if not in group.
+     */
     public boolean contactIsInGroup(Contact findContact, long groupId){
         for (Group g : groups){
             if (g.getId() == groupId){
@@ -241,7 +264,12 @@ public class GroupManager implements ModelChangeNotifier {
         }
         return false;
     }
-
+    /**
+     * Determine whether the specified contact belongs to the group.
+     * @param findContact contact to find.
+     * @param group group to check.
+     * @return true if in group false if not in group.
+     */
     public boolean contactIsInGroup(Contact findContact, Group group){
         getGroupDetails(group);
         for (String CONTACT_ID : group.getCONTACT_IDs()){
@@ -252,6 +280,11 @@ public class GroupManager implements ModelChangeNotifier {
         return false;
     }
 
+    /**
+     * Get all groups that contain the contact.
+     * @param contact
+     * @return
+     */
     public ArrayList<Group> getGroupsForContact(Contact contact){
         ArrayList<Group> groupsForContact = new ArrayList<Group>();
         for (Group g : groups){
@@ -262,6 +295,11 @@ public class GroupManager implements ModelChangeNotifier {
         return groupsForContact;
     }
 
+    /**
+     * Private method to insert the given contact_id into the database.
+     * @param CONTACT_ID
+     * @param group
+     */
     private void insertContactIdForGroup(String CONTACT_ID, Group group){
         if (group.getId() != -1
                 && CONTACT_ID != null){
@@ -272,12 +310,13 @@ public class GroupManager implements ModelChangeNotifier {
                     GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID+")" +
                     " VALUES('"+ CONTACT_ID +"', " + group.getId() + " );");
         }
-
-        if (group.getName().toUpperCase() == "BLACKLIST"){
-            // TODO: something special to make the contact blacklisted, if possible.
-        }
     }
 
+    /**
+     * Private method to remove the contact_id from the database.
+     * @param CONTACT_ID
+     * @param group
+     */
     private void removeContactIdForGroup(String CONTACT_ID, Group group){
         if (group.getId() != -1
                 && CONTACT_ID != null){
@@ -288,10 +327,6 @@ public class GroupManager implements ModelChangeNotifier {
             db.execSQL("DELETE FROM " + GroupContract.ContactToGroup.TABLE_NAME + " " +
                     "WHERE " + GroupContract.ContactToGroup.COLUMN_NAME_CONTACT_ID + " LIKE " + " '" + CONTACT_ID + "' " +
                     "AND " + GroupContract.ContactToGroup.COLUMN_NAME_GROUP_ID + " = " + group.getId());
-        }
-
-        if (group.getName().toUpperCase() == "BLACKLIST"){
-            // TODO: something special to make the contact blacklisted, if possible.
         }
     }
 

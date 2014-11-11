@@ -4,12 +4,18 @@ package com.example.chris.group_project;
 import java.util.ArrayList;
 
 /**
- * Created by nahuecht on 10/20/2014.
+ * Model object that stores information for a single Group.
  */
 
 public class Group
 {
-    private long id = -1; // "-1" stands in for "null", indicates a group that does not exist in DB
+    /**
+     * Database id of group. -1 == "null", does not exist in database.
+     */
+    private long id = -1;
+    /**
+     * Name of the group.
+     */
     private String name;
     /**
      * Array that holds Contact objects for the purpose of storing references to Android managed
@@ -19,44 +25,82 @@ public class Group
      * the Android ContactsProvider
      */
     private ArrayList<String> CONTACT_IDs;
+    /**
+     * Indicates that the group object has all details loaded.
+     */
     private boolean containsDetails = false;
+    /**
+     * Indicates that the group object has been modified after being loaded.
+     */
     private boolean containsNewData = false;
 
+    /**
+     * Construct empty group object.
+     */
     public Group(){
         this.CONTACT_IDs = new ArrayList<String>();
     }
 
+    /**
+     * Construct group with given name.
+     * @param name
+     */
     public Group(String name){
         this();
         this.name = name;
     }
 
+    /**
+     * Construct group with given id and name.
+     * @param id
+     * @param name
+     */
     public Group(int id, String name)
     {
         this(name);
         this.id = id;
     }
 
+    /**
+     * Get the database id of the group
+     * @return id
+     */
     public long getId()
     {
         return id;
     }
 
+    /**
+     * Set the database id of the group.
+     * @param id
+     */
     public void setId(long id)
     {
         this.id = id;
     }
 
+    /**
+     * Get the name of the group.
+     * @return
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * Set the name of the group
+     * @param name name
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * Determine whether all group details are loaded
+     * @return
+     */
     public boolean containsDetails() {
         return containsDetails;
     }

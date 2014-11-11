@@ -1,6 +1,7 @@
 package com.example.chris.group_project;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
         TextView name;
         ArrayAdapter<String> phoneNumberAdapter;
         ArrayAdapter<String> emailAdapter;
+        LinearLayout groupHolder;
         private static int cNum;
 
 
@@ -134,45 +136,80 @@ import java.util.ArrayList;
 
        private void populateContactGroupView()
        {
-           LinearLayout temp = (LinearLayout) findViewById(R.id.display_groups);
-          // ArrayList<Button> groups = createGroupBtns();
-           //addGroupButtonsToView(temp,groups);
+
+           ArrayList<Button> groups = createGroupBtns();
+           addGroupButtonsToView(groups);
        }
 
         private ArrayList<Button> createGroupBtns()
         {
             ArrayList<Button> groupBs = new ArrayList<Button>();
-            GroupManager manager = GroupManager.getInstance(this);
-            ArrayList<Group> groupHolder = manager.getGroups();
-            ArrayList<Integer> integerHolder = contact.getGroups();
+            final GroupManager manager = GroupManager.getInstance(this);
+            ArrayList<Group> groupHolder = manager.getGroupsForContact(contact);
+            System.out.println("GS:"+groupHolder.size());
 
-            for(int i=0;i<integerHolder.size();i++)
+
+            for(int i=0;i<groupHolder.size();i++)
             {
-                for(int j=0;i<groupHolder.size();j++)
-                {
-                    if (groupHolder.get(j).getId() == integerHolder.get(i))
-                    {
-                        Button btn = new Button(this);
-                        btn.setText(groupHolder.get(i).getName());
-                        groupBs.add(btn);
-                    }
-                }
+                Button temp = createGroupButton(groupHolder.get(i));
+                groupBs.add(temp);
             }
-
-
             return groupBs;
         }
-
-        private void addGroupButtonsToView(LinearLayout temp,ArrayList<Button> groups)
+        private Button createGroupButton(Group group)
         {
+            Button btn = new Button(this);
+            btn.setText(group.getName());
+            btn.setBackgroundColor(-16088125);              // Sets color to a Blue
+            btn.setTextColor(-1);                           // Sets text to White
+            btn.setPadding(5,0,0,0);
+            addGroupClickListener(btn,group);
+            return btn;
+        }
+
+        private Button addGroupClickListener(Button btn,Group temp)
+        {
+
+            final GroupManager manager = GroupManager.getInstance(this);
+            final Group group =  manager.get(temp.getId()); // make sure the reference is correct
+            btn.setOnClickListener( new View.OnClickListener()
+            {
+                public void onClick(View view)
+                {
+
+                    if (group != null )
+                    {
+                        Intent displayGroupIntent = new Intent( display_contact.this,GroupActivity.class);
+
+                        if (group != null) {
+                            displayGroupIntent.putExtra("groupId", group.getId());
+                        }
+                        startActivity(displayGroupIntent);
+                    }
+                }
+            });
+            return btn;
+        }
+
+
+        private void addGroupButtonsToView(ArrayList<Button> groups)
+        {
+            groupHolder = (LinearLayout) findViewById(R.id.display_groups);
+            groupHolder.removeAllViews();
             for(int i=0;i<groups.size();i++)
             {
-                temp.addView(
+                System.out.println("ADDEDDDDD");
+                groupHolder.addView(
                         groups.get(i),
                         new ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT)
                 );
+                groupHolder.addView(
+                        new TextView(this),
+                        new ViewGroup.LayoutParams(5,ViewGroup.LayoutParams.WRAP_CONTENT)
+                );
+
             }
         }
 
@@ -327,6 +364,7 @@ import java.util.ArrayList;
             ContactManager temp = ContactManager.getInstance(this);
             temp.refresh();
             contact = temp.getContactDetails(cNum);
+            groupHolder.removeAllViews();
             populateItems();
         }
 

@@ -54,7 +54,7 @@ public final class R {
         public static final int contact_picker_list_view=0x7f090002;
         public static final int contacts_list_view=0x7f090004;
         public static final int container=0x7f090003;
-        public static final int display_groups=0x7f09002b;
+        public static final int display_groups=0x7f09002c;
         public static final int editText=0x7f090012;
         public static final int edit_contact_button=0x7f090025;
         public static final int emailString=0x7f090028;
@@ -63,8 +63,8 @@ public final class R {
         public static final int group_list_item_image=0x7f090019;
         public static final int group_list_item_text=0x7f09001a;
         public static final int groups_list_view=0x7f090017;
-        public static final int groups_string=0x7f09002c;
-        public static final int horizontalScrollView=0x7f09002a;
+        public static final int groups_string=0x7f09002a;
+        public static final int horizontalScrollView=0x7f09002b;
         public static final int line=0x7f090008;
         public static final int line1=0x7f09000d;
         public static final int linearLayout=0x7f09001b;

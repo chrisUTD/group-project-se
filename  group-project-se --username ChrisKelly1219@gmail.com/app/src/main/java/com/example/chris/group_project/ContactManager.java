@@ -2,6 +2,7 @@ package com.example.chris.group_project;
 
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
@@ -432,6 +433,12 @@ public class ContactManager implements ModelChangeNotifier {
     public void blockContact(Contact contact)
     {
         contact.setSendToVoicemail(1);
+
+        ContentValues mUpdateValues = new ContentValues();
+        mUpdateValues.put(ContactsContract.Contacts.SEND_TO_VOICEMAIL, 1);
+
+        context.getContentResolver().update(contact.getUri(), mUpdateValues, null, null);
+
     }
 
     /**
@@ -441,5 +448,10 @@ public class ContactManager implements ModelChangeNotifier {
     public void unblockContact(Contact contact)
     {
         contact.setSendToVoicemail(0);
+
+        ContentValues mUpdateValues = new ContentValues();
+        mUpdateValues.put(ContactsContract.Contacts.SEND_TO_VOICEMAIL, 0);
+
+        context.getContentResolver().update(contact.getUri(), mUpdateValues, null, null);
     }
 }

@@ -49,7 +49,7 @@
                     android:layout_height="73dp"
                     android:text="Edit"
                     android:id="@+id/edit_contact_button"
-                    android:background="#ff0a83c3"
+                    android:background="@color/contact_view_button_color"
                     android:textColor="@color/contact_view_button_text_color"
                     android:textSize="@dimen/edit_button_text_size"
                     android:layout_marginTop="10dp" />
@@ -113,6 +113,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Groups"
+                    android:id="@+id/groups_string"
+                    android:textStyle="bold"
+                    android:layout_marginRight="5dp" />
+
                 <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -122,17 +131,12 @@
                         android:orientation="horizontal"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:id="@+id/display_groups" />
+                        android:id="@+id/display_groups"
+                        android:divider="#ff000000"
+                        android:dividerPadding="10dp" />
                 </HorizontalScrollView>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Groups"
-                android:id="@+id/groups_string"
-                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

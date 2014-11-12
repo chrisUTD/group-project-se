@@ -1,7 +1,7 @@
 package com.example.chris.group_project;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -18,9 +18,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Chris on 10/23/2014.
- */
 
     public class display_contact  extends Activity
     {
@@ -42,7 +39,7 @@ import java.util.ArrayList;
         public display_contact(){}
 
 
-
+        // Populates views and sets contact
         @Override
         protected void onCreate(Bundle savedInstanceState)
         {
@@ -52,10 +49,11 @@ import java.util.ArrayList;
             populateItems();
         }
 
+
+        // Retrieve the contact id passed through the intent when this activity is launched
+        // the retrieve contact and set it as this.contact
         private void setContact()
         {
-            // Retrieve the contact id passed through the intent when this activity is launched
-            // the retrieve contact and set it as this.contact
             Intent intent = getIntent();
             if (intent != null){
                 Bundle extras = intent.getExtras();
@@ -84,13 +82,14 @@ import java.util.ArrayList;
             populateContactGroupView();
         }
 
+        // Sets nmae view to the name of the contact
         private void createNameView()
         {
             name = (TextView) findViewById(R.id.sc_Name);
             name.setText(contact.getDisplayName());
-
         }
 
+        // Sets the image view on show_COntact to the assigned picture for the contact
         private void createImageView()
         {
             picture = (ImageView) findViewById(R.id.sc_Image);
@@ -100,6 +99,8 @@ import java.util.ArrayList;
             }
         }
 
+        //Creates the edit button for the contact and adds an onClickListener
+        // that initiates the edit contact activity
         private void createEditButton()
         {
             cNum = contact.getId();
@@ -110,7 +111,6 @@ import java.util.ArrayList;
                 public void onClick(View temp)
                 {
                     Uri lookupUri = ContactsContract.Contacts.getLookupUri(Long.parseLong(contact.getCONTACT_ID()), contact.getLOOKUP_KEY());
-
                     Intent editIntent = new Intent(Intent.ACTION_EDIT);
                     editIntent.setDataAndType(lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
                     editIntent.putExtra("finishActivityOnSaveCompleted", true);
@@ -119,14 +119,14 @@ import java.util.ArrayList;
             });
 
         }
-
+        //Populates the phone_number_list view by using the PhoneListAdapter
         private void CreatePhoneListView()
         {
             phoneListView = (ListView) findViewById(R.id.phone_number_listView);
             phoneNumberAdapter = new phoneNumberListAdapter();
             phoneListView.setAdapter((phoneNumberAdapter));
         }
-
+        //Populates the email_list_view by using the emailListAdapter
         private void CreateEmailListView()
         {
             emailListView = (ListView) findViewById(R.id.email_list_view);
@@ -141,21 +141,22 @@ import java.util.ArrayList;
            addGroupButtonsToView(groups);
        }
 
+        //This method gets the name of all groups belonging to contact and puts them on buttons
         private ArrayList<Button> createGroupBtns()
         {
             ArrayList<Button> groupBs = new ArrayList<Button>();
             final GroupManager manager = GroupManager.getInstance(this);
             ArrayList<Group> groupHolder = manager.getGroupsForContact(contact);
-            System.out.println("GS:"+groupHolder.size());
 
-
-            for(int i=0;i<groupHolder.size();i++)
+            for(Group group : groupHolder)
             {
-                Button temp = createGroupButton(groupHolder.get(i));
+                Button temp = createGroupButton(group);
                 groupBs.add(temp);
             }
             return groupBs;
         }
+        //Creates the button with size characteristics and colors
+        //These buttons are then passed back to createGroupBtns where they are added tpo an array
         private Button createGroupButton(Group group)
         {
             Button btn = new Button(this);
@@ -167,6 +168,8 @@ import java.util.ArrayList;
             return btn;
         }
 
+        //adds the listener to each group button that launches the appropriate group activity
+        //when the group is tapped
         private Button addGroupClickListener(Button btn,Group temp)
         {
 
@@ -191,16 +194,16 @@ import java.util.ArrayList;
             return btn;
         }
 
-
+        //Creates individual views that are then added to a horizontal list view
+        //The larger list view is contained in a horizontal scroll view
         private void addGroupButtonsToView(ArrayList<Button> groups)
         {
             groupHolder = (LinearLayout) findViewById(R.id.display_groups);
             groupHolder.removeAllViews();
-            for(int i=0;i<groups.size();i++)
+            for(Button groupBtn : groups)
             {
-                System.out.println("ADDEDDDDD");
                 groupHolder.addView(
-                        groups.get(i),
+                        groupBtn,
                         new ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -212,7 +215,6 @@ import java.util.ArrayList;
 
             }
         }
-
 
 
         private class phoneNumberListAdapter extends ArrayAdapter<String>
@@ -306,9 +308,10 @@ import java.util.ArrayList;
 
         }
 
+        // Inflate the menu; this adds items to the action bar if it is present.
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
-            // Inflate the menu; this adds items to the action bar if it is present.
+
             getMenuInflater().inflate(R.menu.show_contact, menu);
             this.optionsMenu = menu;
             SetBlockMessage();
@@ -332,7 +335,8 @@ import java.util.ArrayList;
         }
 
         @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
+        public boolean onOptionsItemSelected(MenuItem item)
+        {
             // Handle action bar item clicks here. The action bar will
             // automatically handle clicks on the Home/Up button, so long
             // as you specify a parent activity in AndroidManifest.xml.
@@ -341,7 +345,7 @@ import java.util.ArrayList;
                 case R.id.action_delete:
                     ContactManager.getInstance(this).deleteContact(contact);
                     finish();
-                    return true;
+                    //return true;
                 case R.id.action_block:
                     if(contact.getSendToVoicemail() == 0)
                     {

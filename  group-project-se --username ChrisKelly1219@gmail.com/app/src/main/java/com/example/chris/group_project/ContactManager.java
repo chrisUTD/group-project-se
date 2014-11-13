@@ -114,7 +114,7 @@ public class ContactManager implements ModelChangeNotifier {
         is linear after that. Contact.search is a constant time compare to check of the 3 different
         names associated with contact so sorting them means that the lower alphabetic
         contacts will be hit rather quickly and the later contacts will be hit in O(n lg n)
-        at the worst which is much better than n^3.
+        at the worst.
          */
         Collections.sort(results, new Comparator<Contact>()
         {

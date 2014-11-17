@@ -257,11 +257,8 @@ import java.util.ArrayList;
                 {
                     public void onClick(View temp)
                     {
-                        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                        smsIntent.setType("vnd.android-dir/mms-sms");
-                        smsIntent.putExtra("address",phoneNumber);
-                        smsIntent.putExtra("sms_body","");
-                        startActivity(smsIntent);
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phoneNumber, null)));
+
                    }
                 });
 

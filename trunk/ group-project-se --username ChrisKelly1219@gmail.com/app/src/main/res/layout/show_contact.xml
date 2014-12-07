@@ -72,7 +72,7 @@
 
                 <ListView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="47dp"
                     android:id="@+id/phone_number_listView"
                     android:layout_marginTop="5dp"
                     android:divider="#ff000000"
@@ -100,7 +100,7 @@
 
                 <ListView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="98dp"
                     android:id="@+id/email_list_view"
                     android:divider="#ff000000"
                     android:dividerHeight="1dp"
